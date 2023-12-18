@@ -29,6 +29,8 @@ class LanguageController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('modules', 'language.index');
+
         $languages = $this->languageService->paginate($request);
 
         $config = [
@@ -54,6 +56,8 @@ class LanguageController extends Controller
 
     public function create()
     {
+        $this->authorize('modules', 'language.create');
+
         $config = $this->confiData();
         $config['seo'] = config('apps.language');
         $config['method'] = 'create';
@@ -72,6 +76,8 @@ class LanguageController extends Controller
     }
 
     public function edit($id){
+        $this->authorize('modules', 'language.update');
+
         $language = $this->languageRepository->findById($id);
         $config = $this->confiData();
         $config['seo'] = config('apps.language');
@@ -92,6 +98,8 @@ class LanguageController extends Controller
     }
 
     public function delete($id){
+        $this->authorize('modules', 'language.destroy');
+
         $config['seo'] = config('apps.language');
         $language = $this->languageRepository->findById($id);
         $template = 'backend.language.delete';

@@ -1,6 +1,6 @@
-@include('backend.dashboard.component.breadcrumb',['title' => $config['seo']['create']['title']])
+@include('backend.dashboard.component.permission',['title' => $config['seo']['create']['title']])
 
-{{-- <form action="{{ route('user.catalogue.updatePermission') }}" method="post" class="box">
+<form action="{{ route('user.Catalogue.updatePermission') }}" method="post" class="box">
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
@@ -39,4 +39,4 @@
             <button class="btn btn-primary" type="submit" name="send" value="send">Lưu lại</button>
         </div>
     </div>
-</form> --}}
+</form>

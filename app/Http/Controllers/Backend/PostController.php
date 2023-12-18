@@ -37,6 +37,7 @@ class PostController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('modules', 'post.index');
         $posts = $this->postService->paginate($request);
 
         $config = [
@@ -64,6 +65,8 @@ class PostController extends Controller
 
     public function create()
     {
+        $this->authorize('modules', 'post.create');
+
         $config = $this->confiData();
         $config['seo'] = config('apps.post');
         $config['method'] = 'create';
@@ -85,6 +88,7 @@ class PostController extends Controller
     }
 
     public function edit($id){
+        $this->authorize('modules', 'post.update');
         $post = $this->postRepository->getPostById($id, $this->language);
         $config = $this->confiData();
         $config['seo'] = config('apps.post');
@@ -109,6 +113,7 @@ class PostController extends Controller
     }
 
     public function delete($id){
+        $this->authorize('modules', 'post.destroy');
         $config['seo'] = config('apps.post');
         $post = $this->postRepository->getPostById($id, $this->language);
         $template = 'backend.post.post.delete';

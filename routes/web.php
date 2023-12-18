@@ -45,6 +45,7 @@ Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dash
         Route::get('{id}/delete', [UserCatalogueController::class, 'delete'])->where(['id' => '[0-9]+'])->name('user.Catalogue.delete');
         Route::post('{id}/destroy', [UserCatalogueController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('user.Catalogue.destroy');
         Route::get('permission', [UserCatalogueController::class, 'permission'])->name('user.Catalogue.permission');
+        Route::post('updatePermission', [UserCatalogueController::class, 'updatePermission'])->name('user.Catalogue.updatePermission');
 
     });
 

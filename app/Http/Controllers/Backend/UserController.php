@@ -37,6 +37,8 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('modules', 'user.index');
+
         $users = $this->userService->paginate($request);
 
         $config = [
@@ -63,19 +65,9 @@ class UserController extends Controller
 
     public function create()
     {
+        $this->authorize('modules', 'user.create');
 
         $provinces = $this->provinceRepository->all();
-        // $config = [
-        //     'css' => [
-        //         'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
-        //     ],
-            
-        //     'js' => [
-        //         'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-        //         'backend/library/location.js',
-        //     ]
-            
-        // ];
         $config = $this->config();
         $config['seo'] = config('apps.user');
         $config['method'] = 'create';
@@ -95,19 +87,10 @@ class UserController extends Controller
     }
 
     public function edit($id){
+        $this->authorize('modules', 'user.update');
+
         $user = $this->userRepository->findById($id);
         $provinces = $this->provinceRepository->all();
-        // $config = [
-        //     'css' => [
-        //         'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
-        //     ],
-            
-        //     'js' => [
-        //         'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-        //         'backend/library/location.js',
-        //     ]
-            
-        // ];
         $config = $this->config();
         $config['seo'] = config('apps.user');
         $config['method'] = 'edit';
@@ -128,6 +111,8 @@ class UserController extends Controller
     }
 
     public function delete($id){
+        $this->authorize('modules', 'user.destroy');
+
         $config['seo'] = config('apps.user');
         $user = $this->userRepository->findById($id);
         $template = 'backend.user.user.delete';

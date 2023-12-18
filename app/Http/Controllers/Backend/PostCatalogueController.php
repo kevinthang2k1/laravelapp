@@ -41,6 +41,8 @@ class PostCatalogueController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('modules', 'post.catalogue.index');
+
         $postCatalogues = $this->postCatalogueService->paginate($request);
 
         $config = [
@@ -67,6 +69,7 @@ class PostCatalogueController extends Controller
 
     public function create()
     {
+        $this->authorize('modules', 'post.catalogue.create');
         $config = $this->confiData();
         $config['seo'] = config('apps.postcatalogue');
         $config['method'] = 'create';
@@ -87,6 +90,7 @@ class PostCatalogueController extends Controller
     }
 
     public function edit($id){
+        $this->authorize('modules', 'post.catalogue.update');
         $postCatalogue = $this->postCatalogueRepository->getPostCatalogueById($id, $this->language);
         $config = $this->confiData();
         $config['seo'] = config('apps.postcatalogue');
@@ -110,6 +114,7 @@ class PostCatalogueController extends Controller
     }
 
     public function delete($id){
+        $this->authorize('modules', 'post.catalogue.destroy');
         $config['seo'] = __('messages.postCatalogue');
         $postCatalogue = $this->postCatalogueRepository->getPostCatalogueById($id, $this->language);
         $template = 'backend.post.catalogue.delete';
@@ -121,7 +126,6 @@ class PostCatalogueController extends Controller
     }
 
     public function destroy($id, DeletePostCatalogueRequest $request){
-        
         if($this->postCatalogueService->destroy($id)){
             return redirect()->route('post.catalogue.index')->with('success', 'Xóa bản ghi thành công'); 
         }

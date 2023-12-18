@@ -30,6 +30,8 @@ class UserCatalogueController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('modules', 'user.catalogue.index');
+
         $userCatalogues = $this->userCatalogueService->paginate($request);
 
         $config = [
@@ -56,6 +58,8 @@ class UserCatalogueController extends Controller
 
     public function create()
     {
+        $this->authorize('modules', 'user.catalogue.create');
+
         $config['seo'] = config('apps.user');
         $config['method'] = 'create';
         $template = 'backend.user.catalogue.store';
@@ -73,6 +77,8 @@ class UserCatalogueController extends Controller
     }
 
     public function edit($id){
+        $this->authorize('modules', 'user.catalogue.update');
+
         $userCatalogue = $this->userCatalogueRepository->findById($id);
         $config['seo'] = config('apps.user');
         $config['method'] = 'edit';
@@ -92,6 +98,8 @@ class UserCatalogueController extends Controller
     }
 
     public function delete($id){
+        $this->authorize('modules', 'user.catalogue.destroy');
+
         $config['seo'] = config('apps.user');
         $userCatalogue = $this->userCatalogueRepository->findById($id);
         $template = 'backend.user.catalogue.delete';
@@ -110,7 +118,7 @@ class UserCatalogueController extends Controller
     }
 
     public function permission(){
-        // $this->authorize('modules', 'user.catalogue.permission');
+        $this->authorize('modules', 'user.catalogue.permission');
         $userCatalogues = $this->userCatalogueRepository->all(['permissions']);
 
         $permissions = $this->permissionRepository->all();
@@ -122,6 +130,13 @@ class UserCatalogueController extends Controller
             'permissions',
             'config',
         ));
+    }
+
+    public function updatePermission(Request $request){
+        if($this->userCatalogueService->setPermission($request)){
+            return redirect()->route('user.Catalogue.index')->with('success','Cập nhật quyền thành công');
+        }
+        return redirect()->route('user.Catalogue.index')->with('error','Có vấn đề xảy ra, Hãy thử lại');
     }
 
 }

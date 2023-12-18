@@ -81,12 +81,12 @@ class BaseRepository implements BaseRepositoryInterface
             return $query->forceDelete();
         }
     
-        // public function all(array $relation = []){
-        //     return $this->model->with($relation)->get();
-        // }
-        public function all(){
-            return $this->model->all();
+        public function all(array $relation = []){
+            return $this->model->with($relation)->get();
         }
+        // public function all(){
+        //     return $this->model->all();
+        // }
     
         public function findById(
             int $modelId,
