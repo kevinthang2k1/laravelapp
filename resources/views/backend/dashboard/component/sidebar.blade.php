@@ -23,15 +23,15 @@
                     IN+
                 </div>
             </li>
-            @foreach(config('apps.module.module') as $key => $val)
+            @foreach(__('sidebar.module') as $key => $val)
                 <li class="{{ (in_array($segment, $val['name'])) ? 'active' : '' }}">
-                    <a href=""><i class="{{ $val['icon'] }}"></i><span class="nav-label">{{ $val['title'] }}</span> <span class="fa arrow"></span></a>
+                    <a href=""><i class="{{ $val['icon'] }}"></i> <span class="nav-label">{{ $val['title'] }}</span> <span class="fa arrow"></span></a>
                     @if(isset($val['subModule']))
-                        <ul class="nav nav-second-level">
-                            @foreach($val['subModule'] as $module)
-                                <li><a href="{{ $module['route'] }}">{{ $module['title'] }}</a></li>
-                            @endforeach
-                        </ul>
+                    <ul class="nav nav-second-level">
+                        @foreach($val['subModule'] as $module)
+                        <li><a href="{{ $module['route'] }}">{{ $module['title'] }}</a></li>
+                        @endforeach
+                    </ul>
                     @endif
                 </li>
             @endforeach

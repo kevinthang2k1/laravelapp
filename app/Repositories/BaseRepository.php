@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Repositories\Interfaces\BaseRepositoryInterface;
-
+use Illuminate\Database\Eloquent\Model;
 use App\Models\Base;
 
 /**
@@ -64,8 +64,7 @@ class BaseRepository implements BaseRepositoryInterface
             }
             return $query->update($payload);
         }
-       
-    
+
         public function delete(int $id = 0){
             return $this->findById($id)->delete();
         }
@@ -82,8 +81,11 @@ class BaseRepository implements BaseRepositoryInterface
             return $query->forceDelete();
         }
     
-        public function all(array $relation = []){
-            return $this->model->with($relation)->get();
+        // public function all(array $relation = []){
+        //     return $this->model->with($relation)->get();
+        // }
+        public function all(){
+            return $this->model->all();
         }
     
         public function findById(
@@ -94,13 +96,13 @@ class BaseRepository implements BaseRepositoryInterface
             return $this->model->select($column)->with($relation)->findOrFail($modelId);
         }
     
-        public function findByCondition($condition = []){
-            $query = $this->model->newQuery();
-            foreach($condition as $key => $val){
-                $query->where($val[0], $val[1] , $val[2]);
-            }
-            return $query->first();
-        }
+        // public function findByCondition($condition = []){
+        //     $query = $this->model->newQuery();
+        //     foreach($condition as $key => $val){
+        //         $query->where($val[0], $val[1] , $val[2]);
+        //     }
+        //     return $query->first();
+        // }
     
         public function createPivot($model, array $payload = [], string $relation = ''){
             return $model->{$relation}()->attach($model->id, $payload);

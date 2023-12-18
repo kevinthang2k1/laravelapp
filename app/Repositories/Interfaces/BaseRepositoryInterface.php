@@ -26,6 +26,7 @@ interface BaseRepositoryInterface
         array $orderBy = ['id', 'DESC'],
         array $join = [],
         array $relations = [],
+        array $rawQuery = [],
 
     );
 

@@ -12,10 +12,10 @@
             class="changeStatusAll" 
             data-value="2" 
             data-field="publish" 
-            data-model="{{ $config['model'] }}" 
+            {{-- data-model="{{ $config['model'] }}"  --}}
             >
             Xuất bản
-        </a>
+            </a>
         </li>
 
         <li>
@@ -24,10 +24,10 @@
             class="changeStatusAll" 
             data-value="1" 
             data-field="publish" 
-            data-model="{{ $config['model'] }}" 
+            {{-- data-model="{{ $config['model'] }}"  --}}
             >
             Bỏ xuất bản
-        </a>
+            </a>
         </li>
     </ul>
     <a class="close-link">

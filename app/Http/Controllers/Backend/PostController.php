@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Controllers\Backend;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+
 use App\Services\Interfaces\PostServiceInterface as PostService; 
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
 use App\Http\Requests\StorePostRequest;
@@ -15,11 +17,13 @@ class PostController extends Controller
 {
     protected $postService;
     protected $postRepository;
+    protected $languageRepository;
     protected $language;
 
     public function __construct(
         PostService $postService,
-        PostRepository $postRepository
+        PostRepository $postRepository,
+
         ){
         $this->postService = $postService;
         $this->postRepository = $postRepository;
@@ -54,7 +58,7 @@ class PostController extends Controller
             'template',
             'config',
             'posts',
-            'dropdown'
+            'dropdown',
         ));
     }
 

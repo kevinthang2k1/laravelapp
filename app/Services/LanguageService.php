@@ -31,7 +31,7 @@ class LanguageService implements LanguageServiceInterface
         LanguageRepository $languageRepository,
 
     ){
-        $this->LanguageRepository = $languageRepository;
+        $this->languageRepository = $languageRepository;
 
     }
 
@@ -41,7 +41,7 @@ class LanguageService implements LanguageServiceInterface
         $condition['publish']= $request->integer('publish');
 
         $perPage = $request->integer('perpage');
-        $languages = $this->LanguageRepository->pagination
+        $languages = $this->languageRepository->pagination
         (
             $this->paginateSelect(),
             $condition,
@@ -58,7 +58,7 @@ class LanguageService implements LanguageServiceInterface
             $payload =$request->except('_token','send');
             $payload['user_id'] = Auth::id();
             // dd($payload);
-            $language = $this->LanguageRepository->create($payload);
+            $language = $this->languageRepository->create($payload);
             DB::commit();
             return true;
         }catch(\Exception $e ){
@@ -73,7 +73,7 @@ class LanguageService implements LanguageServiceInterface
         try{
 
             $payload =$request->except('_token','send');
-            $language = $this->LanguageRepository->update($id, $payload);
+            $language = $this->languageRepository->update($id, $payload);
             
             DB::commit();
             return true;
@@ -88,7 +88,7 @@ class LanguageService implements LanguageServiceInterface
        
         DB::beginTransaction();
         try{ 
-            $language = $this->LanguageRepository->delete($id);
+            $language = $this->languageRepository->delete($id);
             DB::commit();
             return true;
         }catch(\Exception $e ){
@@ -102,7 +102,7 @@ class LanguageService implements LanguageServiceInterface
         DB::beginTransaction();
         try{
             $payload[$post['field']] = (($post['value'] == 1)?2:1);
-            $language = $this->LanguageRepository->update($post['modelId'], $payload);
+            $language = $this->languageRepository->update($post['modelId'], $payload);
             // $this->changeUserStatus($post, $payload[$post['field']]);
 
             DB::commit();
@@ -119,7 +119,7 @@ class LanguageService implements LanguageServiceInterface
         DB::beginTransaction();
         try{
             $payload[$post['field']] = $post['value'];
-            $flag = $this->LanguageRepository->updateByWhereIn('id', $post['id'], $payload);
+            $flag = $this->languageRepository->updateByWhereIn('id', $post['id'], $payload);
             // $this->changeUserStatus($post, $post['value']);
 
             DB::commit();
@@ -132,28 +132,29 @@ class LanguageService implements LanguageServiceInterface
         }
     }
 
-    // private function changeUserStatus($post, $value){
-    //     DB::beginTransaction();
-    //     try{
-    //         $array = [];
-    //         if(isset($post['modelId'])){
-    //             $array[] = $post['modelId'];
-    //         }else{
-    //             $array = $post['id'];
-    //         }
-    //         $payload[$post['field']] = $value;
-    //         // dd($payload);
-    //         $this->userRepository->updateByWhereIn('user_catalogue_id', $array, $payload);
-    //         // echo 123;die();
-    //         DB::commit();
-    //         return true;
-    //     }catch(\Exception $e ){
-    //         DB::rollBack();
-    //         // Log::error($e->getMessage());
-    //         echo $e->getMessage();die();
-    //         return false;
-    //     }
-    // }
+    public function switch($id){
+        DB::beginTransaction();
+        try{
+            $language = $this->languageRepository->update($id, ['current' => 1]);
+            $payload = ['current' => 0] ;
+            $where = [
+                ['id', '!=', $id],
+                
+            ];
+            $this->languageRepository->updateByWhere($where, $payload );
+
+            DB::commit();
+            return true;
+        }catch(\Exception $e ){
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();die();
+            return false;
+        }
+
+
+    }
+
 
     private function paginateSelect(){
         return [
