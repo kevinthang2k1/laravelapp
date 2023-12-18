@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\LanguageController;
 use App\Http\Controllers\Backend\UserCatalogueController;
 use App\Http\Controllers\Backend\PostCatalogueController;
 use App\Http\Controllers\Backend\PostController;
+use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Ajax\LocationController;
 
 
@@ -43,6 +44,8 @@ Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dash
         Route::post('{id}/update', [UserCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('user.Catalogue.update');
         Route::get('{id}/delete', [UserCatalogueController::class, 'delete'])->where(['id' => '[0-9]+'])->name('user.Catalogue.delete');
         Route::post('{id}/destroy', [UserCatalogueController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('user.Catalogue.destroy');
+        Route::get('permission', [UserCatalogueController::class, 'permission'])->name('user.Catalogue.permission');
+
     });
 
 
@@ -78,6 +81,16 @@ Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dash
         Route::get('{id}/delete', [PostController::class, 'delete'])->where(['id' => '[0-9]+'])->name('post.delete');
         Route::post('{id}/destroy', [PostController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('post.destroy');
     });
+
+    Route::group(['prefix' => 'permission'], function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('permission.index');
+        Route::get('create', [PermissionController::class, 'create'])->name('permission.create');
+        Route::post('store', [PermissionController::class, 'store'])->name('permission.store');
+        Route::get('{id}/edit', [PermissionController::class, 'edit'])->where(['id' => '[0-9]+'])->name('permission.edit');
+        Route::post('{id}/update', [PermissionController::class, 'update'])->where(['id' => '[0-9]+'])->name('permission.update');
+        Route::get('{id}/delete', [PermissionController::class, 'delete'])->where(['id' => '[0-9]+'])->name('permission.delete');
+        Route::delete('{id}/destroy', [PermissionController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('permission.destroy');
+     });
 
 
     /* AJAX */ 

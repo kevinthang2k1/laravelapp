@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use App\Services\Interfaces\UserCatalogueServiceInterface as UserCatalogueService; 
-
 use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
+use App\Repositories\Interfaces\PermissionRepositoryInterface as PermissionRepository;
 use App\Http\Requests\StoreUserCatalogueRequest;
 
 
@@ -15,13 +14,18 @@ class UserCatalogueController extends Controller
 {
     protected $userCatalogueService;
     protected $userCatalogueRepository;
+    protected $permissionRepository;
 
     public function __construct(
         UserCatalogueService $userCatalogueService,
-        UserCatalogueRepository $userCatalogueRepository
+        UserCatalogueRepository $userCatalogueRepository,
+        PermissionRepository $permissionRepository
+
         ){
         $this->userCatalogueService = $userCatalogueService;
         $this->userCatalogueRepository = $userCatalogueRepository;
+        $this->permissionRepository = $permissionRepository;
+
     }
 
     public function index(Request $request)
@@ -103,6 +107,21 @@ class UserCatalogueController extends Controller
             return redirect()->route('user.Catalogue.index')->with('success', 'Xóa bản ghi thành công'); 
         }
         return redirect()->route('user.Catalogue.admin')->with('error', 'Xóa bản ghi không thành công. Hãy thử lại');
+    }
+
+    public function permission(){
+        // $this->authorize('modules', 'user.catalogue.permission');
+        $userCatalogues = $this->userCatalogueRepository->all(['permissions']);
+
+        $permissions = $this->permissionRepository->all();
+        $config['seo'] = __('messages.userCatalogue');
+        $template = 'backend.user.catalogue.permission';
+        return view('backend.dashboard.layout', compact(
+            'template',
+            'userCatalogues',
+            'permissions',
+            'config',
+        ));
     }
 
 }

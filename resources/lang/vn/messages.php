@@ -166,7 +166,7 @@ return [
     'image' => 'Chọn ảnh đại diện',
     'advange' => 'Cấu hình nâng cao',
     'search' => 'Tìm Kiếm',
-    'searchInput' => 'Nhập Từ khóa bạn muốn tìm kiếm...',
+    'searchInput' => "Nhập Từ khóa bạn muốn tìm kiếm...",
     'perpage' => 'bản ghi',
     'title' => 'Tiêu đề',
     'description' => 'Mô tả ngắn',
