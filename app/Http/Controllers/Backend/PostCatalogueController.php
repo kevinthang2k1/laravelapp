@@ -110,7 +110,7 @@ class PostCatalogueController extends Controller
     }
 
     public function delete($id){
-        $config['seo'] = config('apps.postcatalogue');
+        $config['seo'] = __('messages.postCatalogue');
         $postCatalogue = $this->postCatalogueRepository->getPostCatalogueById($id, $this->language);
         $template = 'backend.post.catalogue.delete';
         return view('backend.dashboard.layout', compact(
