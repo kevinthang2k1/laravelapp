@@ -23,7 +23,7 @@ return [
             'subModule' => [
                 [
                     'title' => 'User Group',
-                    'route' => 'user/catalogue/index'
+                    'route' => 'user/Catalogue/index'
                 ],
                 [
                     'title' => 'User',

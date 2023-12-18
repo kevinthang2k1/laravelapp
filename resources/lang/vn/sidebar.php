@@ -47,7 +47,7 @@ return [
             'subModule' => [
                 [
                     'title' => 'QL Nhóm Thành Viên',
-                    'route' => 'user/catalogue/index'
+                    'route' => 'user/Catalogue/index'
                 ],
                 [
                     'title' => 'QL Thành Viên',

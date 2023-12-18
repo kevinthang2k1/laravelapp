@@ -23,7 +23,7 @@ return [
             'subModule' => [
                 [
                     'title' => '用户组',  // User Group
-                    'route' => 'user/catalogue/index'
+                    'route' => 'user/Catalogue/index'
                 ],
                 [
                     'title' => '用户',  // User
