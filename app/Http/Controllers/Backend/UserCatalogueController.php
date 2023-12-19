@@ -30,7 +30,7 @@ class UserCatalogueController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('modules', 'user.catalogue.index');
+        $this->authorize('modules', 'user.Catalogue.index');
 
         $userCatalogues = $this->userCatalogueService->paginate($request);
 
@@ -58,7 +58,7 @@ class UserCatalogueController extends Controller
 
     public function create()
     {
-        $this->authorize('modules', 'user.catalogue.create');
+        $this->authorize('modules', 'user.Catalogue.create');
 
         $config['seo'] = config('apps.user');
         $config['method'] = 'create';
@@ -77,7 +77,7 @@ class UserCatalogueController extends Controller
     }
 
     public function edit($id){
-        $this->authorize('modules', 'user.catalogue.update');
+        $this->authorize('modules', 'user.Catalogue.update');
 
         $userCatalogue = $this->userCatalogueRepository->findById($id);
         $config['seo'] = config('apps.user');
@@ -98,7 +98,7 @@ class UserCatalogueController extends Controller
     }
 
     public function delete($id){
-        $this->authorize('modules', 'user.catalogue.destroy');
+        $this->authorize('modules', 'user.Catalogue.destroy');
 
         $config['seo'] = config('apps.user');
         $userCatalogue = $this->userCatalogueRepository->findById($id);
@@ -118,7 +118,7 @@ class UserCatalogueController extends Controller
     }
 
     public function permission(){
-        $this->authorize('modules', 'user.catalogue.permission');
+        $this->authorize('modules', 'user.Catalogue.permission');
         $userCatalogues = $this->userCatalogueRepository->all(['permissions']);
 
         $permissions = $this->permissionRepository->all();
