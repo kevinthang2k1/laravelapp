@@ -12,7 +12,7 @@ use App\Services\Interfaces\UserServiceInterface as UserService;
 use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
 
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
-
+use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
 
 use App\Http\Requests\StoreUserRequest;
 
@@ -24,15 +24,18 @@ class UserController extends Controller
     protected $userService;
     protected $provinceRepository;
     protected $userRepository;
+    protected $userCatalogueRepository;
 
     public function __construct(
         UserService $userService,
         ProvinceRepository $provinceRepository,
-        UserRepository $userRepository
-        ){
+        UserRepository $userRepository,
+        UserCatalogueRepository $userCatalogueRepository
+    ){
         $this->userService = $userService;
         $this->provinceRepository = $provinceRepository;
         $this->userRepository = $userRepository;
+        $this->userCatalogueRepository = $userCatalogueRepository;
     }
 
     public function index(Request $request)
@@ -67,6 +70,8 @@ class UserController extends Controller
     {
         $this->authorize('modules', 'user.create');
 
+        $userCatalogues = $this->userCatalogueRepository->all();
+
         $provinces = $this->provinceRepository->all();
         $config = $this->config();
         $config['seo'] = config('apps.user');
@@ -76,6 +81,7 @@ class UserController extends Controller
             'template',
             'config',
             'provinces',
+            'userCatalogues'
         ));
     }
 

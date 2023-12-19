@@ -60,6 +60,9 @@ class UserCatalogueController extends Controller
     {
         $this->authorize('modules', 'user.Catalogue.create');
 
+      
+       
+
         $config['seo'] = config('apps.user');
         $config['method'] = 'create';
         $template = 'backend.user.catalogue.store';
@@ -71,7 +74,7 @@ class UserCatalogueController extends Controller
 
     public function store(StoreUserCatalogueRequest $request){
         if($this->userCatalogueService->create($request)){
-            return redirect()->route('user.Catalogue.index')->with('success', 'Thêm mới bản ghi thành công'); 
+            return redirect()->route('user.Catalogue.index')->with('success', 'Thêm mới bản ghi thành công');  
         }
         return redirect()->route('user.Catalogue.admin')->with('error', 'Thêm mới bản ghi không thành công. Hãy thử lại');
     }
