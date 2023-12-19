@@ -60,9 +60,6 @@ class UserCatalogueController extends Controller
     {
         $this->authorize('modules', 'user.Catalogue.create');
 
-      
-       
-
         $config['seo'] = config('apps.user');
         $config['method'] = 'create';
         $template = 'backend.user.catalogue.store';

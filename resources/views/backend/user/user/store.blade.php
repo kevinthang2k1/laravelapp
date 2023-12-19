@@ -60,17 +60,15 @@
                                 </div>
                             </div>
                         </div>
-                       
                         <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
                                     <label for="" class="control-label text-left">Nhóm thành viên<span class="text-danger">*</span></label>
                                     <select name="user_catalogue_id" class="form-control setupSelect2">
-                                        <option value="0">[Chọn Nhóm Thành Viên]</option>
+                                        <option value="0">[Chọn nhóm thành viên]</option>
                                         @foreach($userCatalogues as $key => $item)
                                         <option {{ $item->id  == old('user_catalogue_id', (isset($user->user_catalogue_id)) ? $user->user_catalogue_id : '') ? 'selected' : '' }} value="{{ $item->id }}">{{ $item->name }}</option>
                                         @endforeach
-                                        
                                     </select>
                                 </div>
                             </div>

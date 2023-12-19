@@ -95,6 +95,8 @@ class UserController extends Controller
     public function edit($id){
         $this->authorize('modules', 'user.update');
 
+        $userCatalogues = $this->userCatalogueRepository->all();//khi tạo mới nhóm thành viên thì data nhóm nhảy sang tạo mới thành viên
+        // dd($userCatalogues);
         $user = $this->userRepository->findById($id);
         $provinces = $this->provinceRepository->all();
         $config = $this->config();
@@ -106,6 +108,8 @@ class UserController extends Controller
             'config',
             'provinces',
             'user',
+            'userCatalogues',
+
         ));
     }
 
