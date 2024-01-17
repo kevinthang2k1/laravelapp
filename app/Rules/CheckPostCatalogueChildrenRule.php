@@ -8,11 +8,13 @@ use App\Models\PostCatalogue;
 
 class CheckPostCatalogueChildrenRule implements ValidationRule
 {
+
     protected $id;
 
     public function __construct($id){
         $this->id = $id;
     }
+
     /**
      * Run the validation rule.
      *
@@ -22,7 +24,7 @@ class CheckPostCatalogueChildrenRule implements ValidationRule
     {
         $flag = PostCatalogue::isNodeCheck($this->id);
         if ($flag == false) {
-            $fail('không thể xóa do vẫn còn danh mục con');
+            $fail('Không thể xóa do vẫn còn danh mục con');
         }
     }
 }

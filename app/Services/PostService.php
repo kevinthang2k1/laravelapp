@@ -124,10 +124,6 @@ class PostService extends BaseService implements PostServiceInterface
         return $this->postRepository->update($post->id, $payload);
     }
 
-    private function formatAlbum($request){
-        return ($request->input('album') && !empty($request->input('album'))) ? json_encode($request->input('album')) : '';
-    }
-
     private function updateForPost($post, $request){
         $payload = $request->only($this->payloadLanguage());
         $payload = $this->formatLanguagePayload($payload, $request);

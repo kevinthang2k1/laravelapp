@@ -68,7 +68,10 @@ return [
                     'title' => 'QL Ngôn ngữ',
                     'route' => 'language/index'
                 ],
-                
+                [
+                    'title' => 'QL Module',
+                    'route' => 'generate/index'
+                ],
             ]
         ]
     ],

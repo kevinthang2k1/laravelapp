@@ -13,6 +13,9 @@ use App\Http\Requests\StoreLanguageRequest;
 
 use App\Http\Requests\UpdateLanguageRequest;
 
+use App\Http\Requests\TranslateRequest;
+
+
 
 class LanguageController extends Controller
 {
@@ -134,5 +137,52 @@ class LanguageController extends Controller
         }
         return redirect()->back();
     }
+
+    public function translate($id = 0, $languageId = 0, $model = ''){
+
+        $repositoryInstance = $this->repositoryInstance($model);
+        $languageInstance = $this->repositoryInstance('language');
+        $currentLanguage = $languageInstance->findByCondition([
+            ['canonical' ,'=', session('app_locale')]
+        ]);
+        $object = $repositoryInstance->getPostCatalogueById($id, $currentLanguage->id);
+        $objectTransate = $repositoryInstance->getPostCatalogueById($id, $languageId);
+
+        // $this->authorize('modules', 'language.translate');
+        $option = [
+            'id' => $id,
+            'languageId' => $languageId,
+            'model' =>$model,
+        ];
+        $config['seo'] = config('apps.language');
+        $language = $this->languageRepository;
+        $template = 'backend.language.translate';
+        return view('backend.dashboard.layout', compact(
+            'template',
+            'config',
+            'object',
+            'objectTransate',
+            'option',
+        ));
+        
+    }
+
+    public function storeTranslate(TranslateRequest $request){
+        $option = $request->input('option');
+        if($this->languageService->saveTranslate($option, $request)){
+            return redirect()->back()->with('success', 'Cập nhật bản ghi thành công');
+        }
+        return redirect()->back()->with('error','Có vấn đề xảy ra, Hãy Thử lại');
+    }
+
+    private function repositoryInstance($model){
+        $repositoryNamesspace = '\App\Repositories\\' . ucfirst($model) . 'Repository';
+        if (class_exists($repositoryNamesspace)) {
+            $repositoryInstance = app($repositoryNamesspace);
+        }
+        return $repositoryInstance ?? null;
+    }
+
+
 }
 
