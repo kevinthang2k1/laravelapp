@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use App\Models\PostCatalogue;
 use App\Rules\Check{Module}ChildrenRule;
 
 class Delete{Module}Request extends FormRequest
@@ -19,15 +18,16 @@ class Delete{Module}Request extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
         $id = $this->route('id');
         return [
             'name' => [
-                new Check{Module}ChildrenRule($id)
+               new Check{Module}ChildrenRule($id)
             ],
         ];
     }
+
 }

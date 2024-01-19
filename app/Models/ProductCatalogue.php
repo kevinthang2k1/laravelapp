@@ -8,9 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 use App\Traits\QueryScopes;
 
-
-
-class {ModuleTemplate} extends Model
+class ProductCatalogue extends Model
 {
     use HasFactory, SoftDeletes, QueryScopes;
 
@@ -28,12 +26,12 @@ class {ModuleTemplate} extends Model
         'user_id',
     ];
 
-    protected $table = '{tableName}';
+    protected $table = 'product_catalogues';
 
     public function languages(){
-        return $this->belongsToMany(Language::class, '{pivotTable}' , '{foreignKey}', 'language_id')
+        return $this->belongsToMany(Language::class, 'product_catalogue_language' , 'product_catalogue_id', 'language_id')
         ->withPivot(
-            '{foreignKey}',
+            'product_catalogue_id',
             'language_id',
             'name',
             'canonical',
@@ -45,26 +43,25 @@ class {ModuleTemplate} extends Model
         )->withTimestamps();
     }
 
-    public function {relation}s(){
-        return $this->belongsToMany({relationModel}::class, '{relationPivot}' , '{foreignKey}', '{relation}_id');
+    public function products(){
+        return $this->belongsToMany(Product::class, 'product_catalogue_product' , 'product_catalogue_id', 'product_id');
     }
 
 
-    public function {module}_language(){
-        return $this->hasMany({pivotModel}::class, '{foreignKey}', 'id');
+    public function product_catalogue_language(){
+        return $this->hasMany(ProductCatalogueLanguage::class, 'product_catalogue_id', 'id')->where('language_id','=',1);
     }
 
     public static function isNodeCheck($id = 0){
-        ${relation}Catalogue = {ModuleTemplate}::find($id);
+        $productCatalogue = ProductCatalogue::find($id);
 
-        if(${relation}Catalogue->rgt - ${relation}Catalogue->lft !== 1){
+        if($productCatalogue->rgt - $productCatalogue->lft !== 1){
             return false;
         } 
 
         return true;
         
     }
-
 
 
 

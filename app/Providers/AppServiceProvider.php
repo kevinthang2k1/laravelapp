@@ -18,7 +18,8 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\PostServiceInterface' => 'App\Services\PostService',
 
 
-];
+        'App\Services\Interfaces\ProductCatalogueServiceInterface' => 'App\Services\ProductCatalogueService',
+    ];
 
 
 

@@ -3,10 +3,10 @@
 namespace App\Repositories\Interfaces;
 
 /**
- * Interface UserServiceInterface
+ * Interface {$class}ServiceInterface
  * @package App\Services\Interfaces
  */
-interface {Module}RepositoryInterface
+interface {$class}{$extend}RepositoryInterface
 {
     
 }
