@@ -23,11 +23,11 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
     }
 
     public function pagination(
-        array $column = ['*'],
-        array $condition = [],
-        int $perPage = 1,
-        array $orderBy = ['id', 'DESC'],
+        array $column = ['*'], 
+        array $condition = [], 
+        int $perPage = 1, 
         array $extend =[],
+        array $orderBy = ['id', 'DESC'],
         array $join = [],
         array $relations = [],
         array $rawQuery = [],
@@ -55,10 +55,11 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
             }
         }
 
-        
+        // dd($orderBy);
         if(isset($orderBy) && !empty($orderBy)){
             $query->orderBy($orderBy[0], $orderBy[1]);
         }
+        
 
         return $query->paginate($perPage)
                     ->withQueryString()->withPath(env('APP_URL').$extend['path']);

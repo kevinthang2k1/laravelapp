@@ -22,11 +22,11 @@
                         <h5>Thông tin chung</h5>
                     </div>
                     <div class="ibox-content">
-                       @include('backend.post.post.component.general')
+                        @include('backend.dashboard.component.content', ['model' => ($post) ?? null])
                     </div>
                 </div>
                 @include('backend.dashboard.component.album')
-                @include('backend.post.post.component.seo')
+                @include('backend.post.post.component.seo', ['model' => ($post) ?? null])
             </div>
 
             <div class="col-lg-3">

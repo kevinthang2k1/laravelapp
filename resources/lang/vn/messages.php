@@ -30,56 +30,56 @@ return [
             'title' => 'Xóa nhóm sản phẩm'
         ],
     ],
-    // 'attributeCatalogue' => [
-    //     'index' => [
-    //         'title' => 'Quản lý loại thuộc tính',
-    //         'table' => 'Danh sách loại thuộc tính'
-    //     ],
-    //     'create' => [
-    //         'title' => 'Thêm mới loại thuộc tính'
-    //     ],
-    //     'edit' => [
-    //         'title' => 'Cập nhật loại thuộc tính'
-    //     ],
-    //     'delete' => [
-    //         'title' => 'Xóa loại thuộc tính'
-    //     ],
-    // ],
-    // 'attribute' => [
-    //     'index' => [
-    //         'title' => 'Quản lý thuộc tính',
-    //         'table' => 'Danh sách thuộc tính'
-    //     ],
-    //     'create' => [
-    //         'title' => 'Thêm mới thuộc tính'
-    //     ],
-    //     'edit' => [
-    //         'title' => 'Cập nhật thuộc tính'
-    //     ],
-    //     'delete' => [
-    //         'title' => 'Xóa thuộc tính'
-    //     ],
+    'attributeCatalogue' => [
+        'index' => [
+            'title' => 'Quản lý loại thuộc tính',
+            'table' => 'Danh sách loại thuộc tính'
+        ],
+        'create' => [
+            'title' => 'Thêm mới loại thuộc tính'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật loại thuộc tính'
+        ],
+        'delete' => [
+            'title' => 'Xóa loại thuộc tính'
+        ],
+    ],
+    'attribute' => [
+        'index' => [
+            'title' => 'Quản lý thuộc tính',
+            'table' => 'Danh sách thuộc tính'
+        ],
+        'create' => [
+            'title' => 'Thêm mới thuộc tính'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật thuộc tính'
+        ],
+        'delete' => [
+            'title' => 'Xóa thuộc tính'
+        ],
     
-    // ],
-    // 'product' => [
-    //     'index' => [
-    //         'title' => 'Quản lý sản phẩm',
-    //         'table' => 'Danh sách sản phẩm'
-    //     ],
-    //     'create' => [
-    //         'title' => 'Thêm mới sản phẩm'
-    //     ],
-    //     'edit' => [
-    //         'title' => 'Cập nhật sản phẩm'
-    //     ],
-    //     'delete' => [
-    //         'title' => 'Xóa sản phẩm'
-    //     ],
-    //     'information' => 'Thông tin chung',
-    //     'code' => 'Mã sản phẩm',
-    //     'made_in' => 'Xuất xứ',
-    //     'price' => 'Giá bán sản phẩm',
-    // ],
+    ],
+    'product' => [
+        'index' => [
+            'title' => 'Quản lý sản phẩm',
+            'table' => 'Danh sách sản phẩm'
+        ],
+        'create' => [
+            'title' => 'Thêm mới sản phẩm'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật sản phẩm'
+        ],
+        'delete' => [
+            'title' => 'Xóa sản phẩm'
+        ],
+        'information' => 'Thông tin chung',
+        'code' => 'Mã sản phẩm',
+        'made_in' => 'Xuất xứ',
+        'price' => 'Giá bán sản phẩm',
+    ],
     'postCatalogue' => [
         'index' => [
             'title' => 'Quản lý nhóm bài viết',

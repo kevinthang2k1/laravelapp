@@ -3,10 +3,10 @@
 namespace App\Services\Interfaces;
 
 /**
- * Interface UserServiceInterface
+ * Interface UserCatalogueServiceInterface
  * @package App\Services\Interfaces
  */
 interface PostServiceInterface
 {
-    public function paginate($request);
+    public function paginate($request, $languageId);
 }

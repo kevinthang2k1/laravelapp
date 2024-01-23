@@ -73,7 +73,7 @@ class {$class}Service extends BaseService implements {$class}ServiceInterface
             if(${module}->id > 0){
                 $this->updateLanguageFor{$class}(${module}, $request, $languageId);
                 $this->updateCatalogueFor{$class}(${module}, $request);
-                $this->createRouter(${module}, $request, $this->controllerName);
+                $this->createRouter(${module}, $request, $this->controllerName,$languageId);
             }
             DB::commit();
             return true;

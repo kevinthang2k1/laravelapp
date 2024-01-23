@@ -24,6 +24,9 @@
                 id="ckDescription"
                 {{ (isset($disabled)) ? 'disabled' : '' }} 
                 data-height="100">{{ old('description', ($model->description) ?? '') }}</textarea>
+                {{-- 
+                    các cacsi model này nó đại diện cho cái biến mà truyền từ mọi chỗ mà gọi cái file này    
+                --}}
         </div>
     </div>
 </div>

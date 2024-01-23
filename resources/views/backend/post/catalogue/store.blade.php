@@ -22,11 +22,21 @@
                         <h5>{{ __('messages.tableHeading') }}</h5>
                     </div>
                     <div class="ibox-content">
-                       @include('backend.post.catalogue.component.general')
+                       @include('backend.dashboard.component.content', ['model' => ($postCatalogue) ?? null])
+
+                       {{-- 
+                            khi tách các file như content, Seo, album ra để dùng chung thì chúng nó sẽ phục vụ cho rất nhiều module ví dụ: sản phẩm, và bài viết 
+                       --> vì vậy phải truyền cái model vào 
+
+                        --> ví dụ thằng store này gọi file content thì phải truyền cái $postCatalogue vào
+                    --> khi edit thì ở Controller nó gửi sang 1 biến PostCatalogue
+                --> Thì bên create nó mới ko bị lỗi do việc sử dụng chung 1 view.
+            --> kiểm tra tất cả các file gọi vào như content, album, seo file nào mà có cái biến $model thì phải truyền cái ['model' => ($postCatalogue) vào như là tham số thứ 2 của hàm include;
+                        --}}
                     </div>
                 </div>
-                @include('backend.dashboard.component.album')
-                @include('backend.post.catalogue.component.seo')
+                @include('backend.dashboard.component.album', ['model' => ($postCatalogue) ?? null])
+                @include('backend.post.catalogue.component.seo', ['model' => ($postCatalogue) ?? null])
             </div>
 
             <div class="col-lg-3">

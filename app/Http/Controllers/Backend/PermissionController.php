@@ -70,9 +70,9 @@ class PermissionController extends Controller
 
     public function store(StorePermissionRequest $request){
         if($this->permissionService->create($request)){
-            return redirect()->route('permission.index')->with('success', 'Thêm mới bản ghi thành công'); 
+            return redirect()->route('permission.create')->with('success', 'Thêm mới bản ghi thành công'); 
         }
-        return redirect()->route('permission.admin')->with('error', 'Thêm mới bản ghi không thành công. Hãy thử lại');
+        return redirect()->route('permission.index')->with('error', 'Thêm mới bản ghi không thành công. Hãy thử lại');
     }
 
     public function edit($id){

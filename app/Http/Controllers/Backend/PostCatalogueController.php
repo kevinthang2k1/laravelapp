@@ -103,7 +103,8 @@ class PostCatalogueController extends Controller
             'template',
             'config',
             'dropdown',
-            'postCatalogue',
+            'postCatalogue', //-- CHính là cái này nhưng thằng create nó ko gửi sang và create + edit lại dùng chung view --> dẫn đến khi thêm mới sẽ báo lỗi $Undefined variable $postCatalogue
+            // Vì vậy phải kiểm tra nếu tồn tại cái biến đó thì mới dùng ko thì gán = null 
         ));
     }
 
@@ -115,6 +116,7 @@ class PostCatalogueController extends Controller
     }
 
     public function delete($id){
+        // echo $id;die();
         $this->authorize('modules', 'post.catalogue.destroy');
         $config['seo'] = __('messages.postCatalogue');
         $postCatalogue = $this->postCatalogueRepository->getPostCatalogueById($id, $this->language);
@@ -127,7 +129,7 @@ class PostCatalogueController extends Controller
     }
 
     public function destroy(DeletePostCatalogueRequest $request, $id){
-        if($this->postCatalogueService->destroy($id)){
+        if($this->postCatalogueService->destroy($id, $this->language)){ // --> khi truyền lại chỉ truyền có 2
             return redirect()->route('post.catalogue.index')->with('success','Xóa bản ghi thành công');
         }
         return redirect()->route('post.catalogue.index')->with('error','Xóa bản ghi không thành công. Hãy thử lại');

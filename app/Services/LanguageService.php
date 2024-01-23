@@ -3,20 +3,14 @@
 namespace App\Services;
 
 use App\Services\Interfaces\LanguageServiceInterface;
-
 use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
-
+use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Log;
-
 use Illuminate\Support\Carbon;
-
 use Illuminate\Support\Facades\Hash;
-
 use Illuminate\Support\Facades\Auth;
-
-
+use Illuminate\Support\Str;
 
 /**
  * Class LanguageService
@@ -25,74 +19,76 @@ use Illuminate\Support\Facades\Auth;
 class LanguageService implements LanguageServiceInterface
 {
     protected $languageRepository;
-
+    protected $routerRepository;
+    
 
     public function __construct(
         LanguageRepository $languageRepository,
-
+        RouterRepository $routerRepository,
     ){
         $this->languageRepository = $languageRepository;
-
+        $this->routerRepository = $routerRepository;
     }
 
-    public function paginate($request)
-    {
-        $condition['keyword']= addslashes($request->input('keyword'));
-        $condition['publish']= $request->integer('publish');
+    
 
+    public function paginate($request){
+
+        $condition['keyword'] = addslashes($request->input('keyword'));
+        $condition['publish'] = $request->integer('publish');
         $perPage = $request->integer('perpage');
-        $languages = $this->languageRepository->pagination
-        (
-            $this->paginateSelect(),
-            $condition,
+        $languages = $this->languageRepository->pagination(
+            $this->paginateSelect(), 
+            $condition, 
             $perPage, 
-            ['path'=>'language/index'],
+            ['path' => 'language/index'], 
         );
-        // dd($languages);
         return $languages;
     }
 
     public function create($request){
         DB::beginTransaction();
         try{
-            $payload =$request->except('_token','send');
+            $payload = $request->except(['_token','send']);
             $payload['user_id'] = Auth::id();
-            // dd($payload);
             $language = $this->languageRepository->create($payload);
             DB::commit();
             return true;
         }catch(\Exception $e ){
             DB::rollBack();
+            // Log::error($e->getMessage());
             echo $e->getMessage();die();
             return false;
         }
     }
 
+
     public function update($id, $request){
         DB::beginTransaction();
         try{
 
-            $payload =$request->except('_token','send');
+            $payload = $request->except(['_token','send']);
             $language = $this->languageRepository->update($id, $payload);
-            
             DB::commit();
             return true;
         }catch(\Exception $e ){
             DB::rollBack();
+            // Log::error($e->getMessage());
             echo $e->getMessage();die();
             return false;
         }
     }
 
     public function destroy($id){
-       
         DB::beginTransaction();
-        try{ 
+        try{
             $language = $this->languageRepository->delete($id);
+
             DB::commit();
             return true;
         }catch(\Exception $e ){
             DB::rollBack();
+            // Log::error($e->getMessage());
             echo $e->getMessage();die();
             return false;
         }
@@ -136,12 +132,11 @@ class LanguageService implements LanguageServiceInterface
         DB::beginTransaction();
         try{
             $language = $this->languageRepository->update($id, ['current' => 1]);
-            $payload = ['current' => 0] ;
+            $payload = ['current' => 0];
             $where = [
                 ['id', '!=', $id],
-                
             ];
-            $this->languageRepository->updateByWhere($where, $payload );
+            $this->languageRepository->updateByWhere($where, $payload);
 
             DB::commit();
             return true;
@@ -151,6 +146,7 @@ class LanguageService implements LanguageServiceInterface
             echo $e->getMessage();die();
             return false;
         }
+      
     }
 
     public function saveTranslate($option, $request){
@@ -205,15 +201,16 @@ class LanguageService implements LanguageServiceInterface
         return $temp.'_id';
     }
 
-
+  
     private function paginateSelect(){
         return [
-            'id',
-            'name',
+            'id', 
+            'name', 
             'canonical',
             'publish',
-            'image',
+            'image'
         ];
     }
+
 
 }

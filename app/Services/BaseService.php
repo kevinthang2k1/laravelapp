@@ -52,6 +52,7 @@ class BaseService implements BaseServiceInterface
             'language_id' => $languageId,
             'controllers' => 'App\Http\Controllers\Frontend\\'.$controllerName.'',
         ];
+        // dd($router);
         return $router;
     }
 
@@ -62,12 +63,14 @@ class BaseService implements BaseServiceInterface
 
 
     public function updateRouter($model, $request, $controllerName, $languageId){
-        $payload = $this->formatRouterPayload($model, $request, $controllerName);
+        $payload = $this->formatRouterPayload($model, $request, $controllerName, $languageId);
         $condition = [
             ['module_id','=', $model->id],
             ['controllers','=', 'App\Http\Controllers\Frontend\\'.$controllerName],
+            ['language_id', '=', $languageId],
         ];
         $router = $this->routerRepository->findByCondition($condition);
+        // dd($router);
         $res = $this->routerRepository->update($router->id, $payload);
         return $res;
     }

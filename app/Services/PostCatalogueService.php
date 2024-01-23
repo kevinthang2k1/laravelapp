@@ -120,11 +120,11 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         }
     }
 
-    public function destroy($id){
+    public function destroy($id,$languageId){
         DB::beginTransaction();
         try{
             $postCatalogue = $this->postCatalogueRepository->delete($id);
-            $this->routerRepository->deleteByCondition([
+            $this->routerRepository->forceDeleteByCondition([
                 ['module_id', '=', $id],
                 ['controllers', '=', 'App\Http\Controllers\Frontend\PostCatalogueController'],
             ]);

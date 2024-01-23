@@ -110,8 +110,8 @@ class PostController extends Controller
         ));
     }
 
-    public function update($id, UpdatePostRequest $request){
-        if($this->postService->update($id, $request)){
+    public function update($id, UpdatePostRequest $request,){
+        if($this->postService->update($id, $request,$this->language)){
             return redirect()->route('post.index')->with('success','Cập nhật bản ghi thành công');
         }
         return redirect()->route('post.index')->with('error','Cập nhật bản ghi không thành công. Hãy thử lại');
