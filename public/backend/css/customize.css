@@ -440,6 +440,11 @@ a{
     color:#1a0dab;
     margin-bottom:5px;
 }
+
+.updateVariant .image{
+    height:150px !important;
+}
+
 .form-control {
     -webkit-transition: all .2s ease-out;
     transition: all .2s ease-out;
@@ -611,6 +616,7 @@ input[type=radio].form-control{
 }
 .select2-container--default{
     margin-right:10px;
+    width:100% !important;
 }
 
 .meta-title{
@@ -908,4 +914,12 @@ a{
     border-radius: 5px;
 }
 
+.system-link{
+    font-size: 12px;
+    font-weight: normal;
+    font-style: italic;
+}
 
+.system-textarea{
+    height: 100px !important;
+}

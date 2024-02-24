@@ -111,7 +111,7 @@ class AttributeController extends Controller
     }
 
     public function update($id, UpdateAttributeRequest $request){
-        if($this->attributeService->update($id, $request)){
+        if($this->attributeService->update($id, $request,$this->language)){
             return redirect()->route('attribute.index')->with('success','Cập nhật bản ghi thành công');
         }
         return redirect()->route('attribute.index')->with('error','Cập nhật bản ghi không thành công. Hãy thử lại');

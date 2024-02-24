@@ -93,7 +93,7 @@ class AttributeService extends BaseService implements AttributeServiceInterface
                 $this->updateLanguageForAttribute($attribute, $request, $languageId);
                 $this->updateCatalogueForAttribute($attribute, $request);
                 $this->updateRouter(
-                    $attribute, $request, $this->controllerName
+                    $attribute, $request, $this->controllerName,$languageId
                 );
             }
             DB::commit();

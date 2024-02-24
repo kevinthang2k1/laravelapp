@@ -144,16 +144,18 @@
         }
         finder.popup();
 
-        HT.deletePicture = () => {
-            $(document).on('click', '.delete-image', function(){
-                let _this = $(this)
-                _this.parents('.ui-state-default').remove()
-                if($('.ui-state-default').length == 0){
-                    $('.click-to-upload').removeClass('hidden')
-                    $('.upload-list').addClass('hidden')
-                }
-            })
-        }
+        
+    }
+
+    HT.deletePicture = () => {
+        $(document).on('click', '.delete-image', function(){
+            let _this = $(this)
+            _this.parents('.ui-state-default').remove()
+            if($('.ui-state-default').length == 0){
+                $('.click-to-upload').removeClass('hidden')
+                $('.upload-list').addClass('hidden')
+            }
+        })
     }
 
     $(document).ready(function(){
@@ -162,6 +164,6 @@
         HT.uploadImageAvatar();
         HT.multipleUploadImageCkeditor();
         HT.uploadAlbum();
-        HT.deletePicture();
+        // HT.deletePicture();
     });
 })(jQuery);

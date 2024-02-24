@@ -46,4 +46,23 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
         ->find($id);
     }
 
+    public function searchAttributes(string $keyword = '', array $option = [], int $languageId){
+        return $this->model->whereHas('attribute_catalogues', function($query) use ($option){
+            $query->where('attribute_catalogue_id', $option['attributeCatalogueId']);
+        })->whereHas('attribute_language', function($query) use ($keyword){
+            $query->where('name', 'like', '%'.$keyword.'%');
+        })->get();
+    }
+
+    public function findAttributeByIdArray(array $attributeArray = [], int $languageId = 0){
+        return $this->model->select([
+            'attributes.id',
+            'tb2.name'
+        ])
+        ->join('attribute_language as tb2','tb2.attribute_id','=','attributes.id')
+        ->where('tb2.language_id','=',$languageId)
+        ->whereIn('attributes.id', $attributeArray)
+        ->get();
+    }
+
 }

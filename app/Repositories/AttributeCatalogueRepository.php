@@ -45,4 +45,10 @@ class AttributeCatalogueRepository extends BaseRepository implements AttributeCa
         ->find($id);
     }
 
+    public function getAll(int $languageId = 0){
+        return $this->model->with(['attribute_catalogue_language' => function($query) use ($languageId){
+            $query->where('language_id', $languageId);
+        }, ])->get();
+    }
+
 }

@@ -1,20 +1,28 @@
 <?php   
 return [
-    // 'galleryCatalogue' => [
-    //     'index' => [
-    //         'title' => 'Quản lý hình ảnh',
-    //         'table' => 'Danh sách nhóm hình ảnh'
-    //     ],
-    //     'create' => [
-    //         'title' => 'Thêm mới nhóm hình ảnh'
-    //     ],
-    //     'edit' => [
-    //         'title' => 'Cập nhật nhóm hình ảnh'
-    //     ],
-    //     'delete' => [
-    //         'title' => 'Xóa nhóm hình ảnh'
-    //     ],
-    // ],
+    'system' => [
+        'index' => [
+            'title' => 'Cấu hình hệ thống',
+        ],
+        'create' => [
+            'title' => 'Cài đặt thông tin cấu hình hệ thống',
+        ],
+    ],
+    'galleryCatalogue' => [
+        'index' => [
+            'title' => 'Quản lý hình ảnh',
+            'table' => 'Danh sách nhóm hình ảnh'
+        ],
+        'create' => [
+            'title' => 'Thêm mới nhóm hình ảnh'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật nhóm hình ảnh'
+        ],
+        'delete' => [
+            'title' => 'Xóa nhóm hình ảnh'
+        ],
+    ],
     'productCatalogue' => [
         'index' => [
             'title' => 'Quản lý nhóm sản phẩm',

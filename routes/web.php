@@ -17,6 +17,10 @@ use App\Http\Controllers\Backend\ProductCatalogueController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\AttributeCatalogueController;
 use App\Http\Controllers\Backend\AttributeController;
+use App\Http\Controllers\Ajax\AttributeController as AjaxAttributeController;
+use App\Http\Controllers\Backend\SystemController;
+
+
 //@@useController@@
 
 
@@ -26,7 +30,7 @@ Route::get('/', function () {
 });
 
 
-Route::group(['middleware' => ['admin','locale']], function () {
+Route::group(['middleware' => ['admin','locale', 'backend_default_locale']], function () {
     /*BECKEND ROUTES*/
 Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -58,7 +62,7 @@ Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dash
 
 
     Route::group(['prefix' => 'language'], function(){
-        Route::get('index', [LanguageController::class, 'index'])->name('language.index')->middleware(['admin' ,'locale']);
+        Route::get('index', [LanguageController::class, 'index'])->name('language.index');
         Route::get('create', [LanguageController::class, 'create'])->name('language.create');
         Route::post('store', [LanguageController::class, 'store'])->name('language.store');
         Route::get('{id}/edit', [LanguageController::class, 'edit'])->where(['id' => '[0-9]+'])->name('language.edit');
@@ -70,8 +74,12 @@ Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dash
         Route::post('storeTranslate', [LanguageController::class, 'storeTranslate'])->name('language.storeTranslate');
     });
 
+    Route::group(['prefix' => 'system'], function(){
+        Route::get('index', [SystemController::class, 'index'])->name('system.index');
+    });
+
     Route::group(['prefix' => 'generate'], function(){
-        Route::get('index', [GenerateController::class, 'index'])->name('generate.index')->middleware(['admin' ,'locale']);
+        Route::get('index', [GenerateController::class, 'index'])->name('generate.index');
         Route::get('create', [GenerateController::class, 'create'])->name('generate.create');
         Route::post('store', [GenerateController::class, 'store'])->name('generate.store');
         Route::get('{id}/edit', [GenerateController::class, 'edit'])->where(['id' => '[0-9]+'])->name('generate.edit');
@@ -79,7 +87,6 @@ Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dash
         Route::get('{id}/delete', [GenerateController::class, 'delete'])->where(['id' => '[0-9]+'])->name('generate.delete');
         Route::post('{id}/destroy', [GenerateController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('generate.destroy');
     });
-
 
     Route::group(['prefix' => 'post/catalogue'], function(){
         Route::get('index', [PostCatalogueController::class, 'index'])->name('post.catalogue.index');
@@ -154,18 +161,12 @@ Route::group(['prefix' => 'attribute'], function () {
 });
 //@@new-module@@
 
-
-
-
-
-
-
-
-
     /* AJAX */ 
     Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.index');
     Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->name('ajax.dashboard.changeStatus');
     Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->name('ajax.dashboard.changeStatusAll');
+    Route::get('ajax/attribute/getAttribute', [AjaxAttributeController::class, 'getAttribute'])->name('ajax.attribute.getAttribute');
+    Route::get('ajax/attribute/loadAttribute', [AjaxAttributeController::class, 'loadAttribute'])->name('ajax.attribute.getAttribute');
 });
 
 

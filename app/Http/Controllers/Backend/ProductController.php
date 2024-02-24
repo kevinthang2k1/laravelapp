@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Services\Interfaces\ProductServiceInterface  as ProductService;
 use App\Repositories\Interfaces\ProductRepositoryInterface  as ProductRepository;
+use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface  as AttributeCatalogueRepository;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Requests\DeleteProductRequest;
@@ -19,10 +20,12 @@ class ProductController extends Controller
     protected $productRepository;
     protected $languageRepository;
     protected $language;
+    protected $attributeCatalogue;
 
     public function __construct(
         ProductService $productService,
         ProductRepository $productRepository,
+        AttributeCatalogueRepository $attributeCatalogue,
     ){
         $this->middleware(function($request, $next){
             $locale = app()->getLocale(); // vn en cn
@@ -34,6 +37,7 @@ class ProductController extends Controller
 
         $this->productService = $productService;
         $this->productRepository = $productRepository;
+        $this->attributeCatalogue = $attributeCatalogue;
         $this->initialize();
         
     }
@@ -73,6 +77,8 @@ class ProductController extends Controller
 
     public function create(){
         //$this->authorize('modules', 'product.create');
+
+        $attributeCatalogue = $this->attributeCatalogue->getAll($this->language);
         $config = $this->configData();
         $config['seo'] = __('messages.product');
         $config['method'] = 'create';
@@ -82,6 +88,7 @@ class ProductController extends Controller
             'template',
             'dropdown',
             'config',
+            'attributeCatalogue',
         ));
     }
 
@@ -94,6 +101,7 @@ class ProductController extends Controller
 
     public function edit($id){
         //$this->authorize('modules', 'product.update');
+        $attributeCatalogue = $this->attributeCatalogue->getAll($this->language);
         $product = $this->productRepository->getProductById($id, $this->language);
         $config = $this->configData();
         $config['seo'] = __('messages.product');
@@ -107,10 +115,12 @@ class ProductController extends Controller
             'dropdown',
             'product',
             'album',
+            'attributeCatalogue',
         ));
     }
 
     public function update($id, UpdateProductRequest $request){
+        // dd($request);
         if($this->productService->update($id, $request, $this->language)){
             return redirect()->route('product.index')->with('success','Cập nhật bản ghi thành công');
         }
@@ -143,10 +153,15 @@ class ProductController extends Controller
                 'backend/plugins/ckfinder_2/ckfinder.js',
                 'backend/library/finder.js',
                 'backend/library/seo.js',
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'
+                'backend/library/variant.js',
+                'backend/js/plugins/switchery/switchery.js',
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+                'backend/plugins/nice-select/js/jquery.nice-select.min.js'
             ],
             'css' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+                'backend/plugins/nice-select/css/nice-select.css',
+                'backend/css/plugins/switchery/switchery.css',
             ]
           
         ];

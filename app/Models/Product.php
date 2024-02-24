@@ -20,6 +20,12 @@ class Product extends Model
         'order',
         'user_id',
         'product_catalogue_id',
+        'price',
+        'made_in',
+        'code',
+        'attributeCatalogue',
+        'attribute',
+        'variant',
     ];
 
     protected $table = 'products';
@@ -38,5 +44,9 @@ class Product extends Model
     }
     public function product_catalogues(){
         return $this->belongsToMany(ProductCatalogue::class, 'product_catalogue_product' , 'product_id', 'product_catalogue_id');
+    }
+
+    public function product_variants(){
+        return $this->hasMany(ProductVariant::class,'product_id', 'id');
     }
 }

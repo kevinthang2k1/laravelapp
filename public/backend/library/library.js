@@ -1,13 +1,12 @@
-(function($){
-    "Use Strict"
-    var HT = {};
+(function($) {
+	"use strict";
+	var HT = {}; 
     var _token = $('meta[name="csrf-token"]').attr('content');
-
 
     HT.switchery = () => {
         $('.js-switch').each(function(){
-            var switchery =new Switchery(this, {color: '#1AB394', size:"small"});
-
+            // let _this = $(this)
+            var switchery = new Switchery(this, { color: '#1AB394', size: 'small'});
         })
     }
 
@@ -15,18 +14,19 @@
         if($('.setupSelect2').length){
             $('.setupSelect2').select2();
         }
+        
     }
 
     HT.sortui = () => {
-        $("#sortable").sortable();
-        $("#sortable").disableSelection();
+        $( "#sortable" ).sortable();
+		$( "#sortable" ).disableSelection();
     }
 
     HT.changeStatus = () => {
-        $(document).on('change', '.status',function(e){
-            let _this=$(this)
-            let option ={
-                'value': _this.val(),
+        $(document).on('change', '.status', function(e){
+            let _this = $(this)
+            let option = {
+                'value' : _this.val(),
                 'modelId' : _this.attr('data-modelId'),
                 'model' : _this.attr('data-model'),
                 'field' : _this.attr('data-field'),
@@ -34,22 +34,23 @@
             }
 
             $.ajax({
-                url: 'ajax/dashboard/changeStatus',
-                type: 'POST',
+                url: 'ajax/dashboard/changeStatus', 
+                type: 'POST', 
                 data: option,
-                dataType: 'json',
-                success:function(res){
+                dataType: 'json', 
+                success: function(res) {
                     let inputValue = ((option.value == 1)?2:1)
                     if(res.flag == true){
                         _this.val(inputValue)
                     }
-
+                  
                 },
-                error: function(jqXHR, textStatus, errorThrown){
-                    console.log('Lỗi:' + textStatus + ' ' + errorThrown);
+                error: function(jqXHR, textStatus, errorThrown) {
+                  
+                  console.log('Lỗi: ' + textStatus + ' ' + errorThrown);
                 }
             });
-            console.log(option);
+
             e.preventDefault()
         })
     }
@@ -97,10 +98,10 @@
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                       
-                        console.log('Lỗi: ' + textStatus + ' ' + errorThrown);
+                      console.log('Lỗi: ' + textStatus + ' ' + errorThrown);
                     }
                 });
-                
+
                 e.preventDefault()
             })
         }
@@ -143,14 +144,59 @@
         $('#checkAll').prop('checked', allChecked);
     }
 
-    $(document).ready(function(){
+    HT.int = () => {
+        $(document).on('change keyup blur', '.int', function(){
+            let _this = $(this)
+            let value = _this.val()
+            if(value === ''){
+                $(this).val('0')
+            }
+            value = value.replace(/\./gi, "")
+            _this.val(HT.addCommas(value))
+            if(isNaN(value)){
+                _this.val('0')
+            }
+        })
+
+        $(document).on('keydown', '.int', function(e){
+            let _this = $(this)
+            let data = _this.val()
+            if(data == 0){
+                let unicode = e.keyCode || e.which;
+                if(unicode != 190){
+                    _this.val('')
+                }
+            }
+        })
+    }
+
+
+
+    HT.addCommas = (nStr) => { 
+        nStr = String(nStr);
+        nStr = nStr.replace(/\./gi, "");
+        let str ='';
+        for (let i = nStr.length; i > 0; i -= 3){
+            let a = ( (i-3) < 0 ) ? 0 : (i-3);
+            str= nStr.slice(a,i) + '.' + str;
+        }
+        str= str.slice(0,str.length-1);
+        return str;
+    }
+
+    
+
+	$(document).ready(function(){
         HT.switchery();
         HT.select2();
         HT.changeStatus();
         HT.checkAll();
         HT.checkBoxItem();
         HT.allChecked();
-        HT.changeStatusAll(); 
+        HT.changeStatusAll();
         HT.sortui();
-    });
-})(jQuery)
+        HT.int();
+        
+	});
+
+})(jQuery);

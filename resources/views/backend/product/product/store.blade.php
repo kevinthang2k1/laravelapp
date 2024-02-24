@@ -16,8 +16,9 @@
                         @include('backend.dashboard.component.content', ['model' => ($product) ?? null])
                     </div>
                 </div>
-               @include('backend.dashboard.component.album')
-               @include('backend.dashboard.component.seo', ['model' => ($product) ?? null])
+                @include('backend.dashboard.component.album', ['model' => ($product) ?? null])
+                @include('backend.product.product.component.variant')
+                @include('backend.dashboard.component.seo', ['model' => ($product) ?? null])
             </div>
             <div class="col-lg-3">
                 @include('backend.product.product.component.aside')

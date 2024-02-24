@@ -49,6 +49,10 @@ class BaseRepository implements BaseRepositoryInterface
         return $model->fresh();
     }
 
+    public function createBatch(array $payload = []){
+        return $this->model->insert($payload);
+    }
+
     public function update(int $id = 0, array $payload = []){
        $model = $this->findById($id);
        return $model->update($payload);

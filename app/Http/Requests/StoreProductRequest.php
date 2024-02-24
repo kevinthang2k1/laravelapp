@@ -24,6 +24,7 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required',
             'canonical' => 'required|unique:routers',
+            'attribute' => 'required|array',
         ];
     }
 
