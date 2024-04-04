@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Hash;
  * Class UserService
  * @package App\Services
  */
-class UserService implements UserServiceInterface
+class UserService extends BaseService implements UserServiceInterface
 {
     protected $userRepository;
 
@@ -91,37 +91,6 @@ class UserService implements UserServiceInterface
             return true;
         }catch(\Exception $e ){
             DB::rollBack();
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
-
-    public function updateStatus($post = []){
-        DB::beginTransaction();
-        try{
-            $payload[$post['field']] = (($post['value'] == 1)?2:1) ;
-
-            $user = $this->userRepository->update($post['modelId'], $payload);
-            DB::commit();
-            return true;
-        }catch(\Exception $e ){
-            DB::rollBack();
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
-
-    public function updateStatusAll($post){
-        DB::beginTransaction();
-        try{
-            $payload[$post['field']] = $post['value'];
-            $flag = $this->userRepository->updateByWhereIn('id', $post['id'], $payload);
-
-            DB::commit();
-            return true;
-        }catch(\Exception $e ){
-            DB::rollBack();
-            // Log::error($e->getMessage());
             echo $e->getMessage();die();
             return false;
         }

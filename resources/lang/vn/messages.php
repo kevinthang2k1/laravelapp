@@ -1,5 +1,31 @@
 <?php   
 return [
+    'slide' => [
+        'index' => [
+            'title' => 'Quản lý Slide',
+            'table' => 'Danh sách Slide',
+        ],
+        'create' => [
+            'title' => 'Thêm mới Slide',
+            'children' => 'Cập nhật Slide con cho mục '
+        ],
+        'show' => [
+            'title' => 'Danh sách Slide'
+        ],
+    ],
+    'menu' => [
+        'index' => [
+            'title' => 'Quản lý Menu',
+            'table' => 'Danh sách Menu',
+        ],
+        'create' => [
+            'title' => 'Thêm mới Menu',
+            'children' => 'Cập nhật menu con cho mục '
+        ],
+        'show' => [
+            'title' => 'Danh sách Menu'
+        ],
+    ],
     'system' => [
         'index' => [
             'title' => 'Cấu hình hệ thống',

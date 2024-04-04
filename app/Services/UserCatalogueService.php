@@ -21,7 +21,7 @@ use App\Models\UserCatalogue;
  * Class UserCatalogueService
  * @package App\Services
  */
-class UserCatalogueService implements UserCatalogueServiceInterface
+class UserCatalogueService extends BaseService implements UserCatalogueServiceInterface
 {
     protected $userCatalogueRepository;
     protected $userRepository;
@@ -97,40 +97,6 @@ class UserCatalogueService implements UserCatalogueServiceInterface
             return true;
         }catch(\Exception $e ){
             DB::rollBack();
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
-
-    public function updateStatus($post = []){
-        DB::beginTransaction();
-        try{
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
-            $user = $this->userCatalogueRepository->update($post['modelId'], $payload);
-            $this->changeUserStatus($post, $payload[$post['field']]);
-
-            DB::commit();
-            return true;
-        }catch(\Exception $e ){
-            DB::rollBack();
-            // Log::error($e->getMessage());
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
-
-    public function updateStatusAll($post){
-        DB::beginTransaction();
-        try{
-            $payload[$post['field']] = $post['value'];
-            $flag = $this->userCatalogueRepository->updateByWhereIn('id', $post['id'], $payload);
-            $this->changeUserStatus($post, $post['value']);
-
-            DB::commit();
-            return true;
-        }catch(\Exception $e ){
-            DB::rollBack();
-            // Log::error($e->getMessage());
             echo $e->getMessage();die();
             return false;
         }

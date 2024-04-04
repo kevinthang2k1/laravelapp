@@ -138,7 +138,7 @@ class AttributeService extends BaseService implements AttributeServiceInterface
     private function updateLanguageForAttribute($attribute, $request, $languageId){
         $payload = $request->only($this->payloadLanguage());
         $payload = $this->formatLanguagePayload($payload, $attribute->id, $languageId);
-        $attribute->languages()->detach([$this->language, $attribute->id]);
+        $attribute->languages()->detach([$languageId, $attribute->id]);
         return $this->attributeRepository->createPivot($attribute, $payload, 'languages');
     }
 
@@ -161,39 +161,6 @@ class AttributeService extends BaseService implements AttributeServiceInterface
         return [$request->attribute_catalogue_id];
     }
     
-    public function updateStatus($post = []){
-        DB::beginTransaction();
-        try{
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
-            $post = $this->attributeRepository->update($post['modelId'], $payload);
-            // $this->changeUserStatus($post, $payload[$post['field']]);
-
-            DB::commit();
-            return true;
-        }catch(\Exception $e ){
-            DB::rollBack();
-            // Log::error($e->getMessage());
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
-
-    public function updateStatusAll($post){
-        DB::beginTransaction();
-        try{
-            $payload[$post['field']] = $post['value'];
-            $flag = $this->attributeRepository->updateByWhereIn('id', $post['id'], $payload);
-            // $this->changeUserStatus($post, $post['value']);
-
-            DB::commit();
-            return true;
-        }catch(\Exception $e ){
-            DB::rollBack();
-            // Log::error($e->getMessage());
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
 
     private function whereRaw($request, $languageId){
         $rawCondition = [];

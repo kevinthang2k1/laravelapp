@@ -11,7 +11,7 @@ class System{
                 'brand' => ['type' => 'text', 'label'=> 'Tên thương hiệu'],
                 'slogan' => ['type' => 'text', 'label'=> 'Slogan'],
                 'logo' => ['type' => 'images', 'label'=> 'Logo Website','title' => 'Click vào ô phía dưới để tải logo' ],
-                'favicon' => ['type' => 'images', 'label'=> 'Logo Website','title' => 'Click vào ô phía dưới để tải logo' ],
+                'favicon' => ['type' => 'images', 'label'=> 'Favicon','title' => 'Click vào ô phía dưới để tải logo' ],
                 'copyright' => ['type' => 'text', 'label'=> 'Copyright'],
                 'website' => [
                     'type' => 'select', 
@@ -21,12 +21,13 @@ class System{
                         'close' => 'Website đang bảo trì',
                     ]
                 ],
+                'short_intro' => ['type' => 'editor', 'label' => 'Giới thiệu ngắn'],
             ]
         ];
 
         $data['contact'] = [
-            'label' => 'Thông tin chung',
-            'description' => 'Cài đặt đầy đủ thông tin chung của website ví dụ: Địa chỉ công ty, Văn phòng giao dịch, Hotline, Bản đồ,vv.....',
+            'label' => 'Thông tin liên hệ',
+            'description' => 'Cài đặt đầy đủ Thông tin liên hệ của website ví dụ: Địa chỉ công ty, Văn phòng giao dịch, Hotline, Bản đồ,vv.....',
             'value' => [
                 'office' => ['type' => 'text', 'label'=> 'Địa chỉ công ty'],
                 'address' => ['type' => 'text', 'label'=> 'Văn phòng giao dịch '],

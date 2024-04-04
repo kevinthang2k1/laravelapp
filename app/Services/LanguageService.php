@@ -16,7 +16,7 @@ use Illuminate\Support\Str;
  * Class LanguageService
  * @package App\Services
  */
-class LanguageService implements LanguageServiceInterface
+class LanguageService extends BaseService implements LanguageServiceInterface
 {
     protected $languageRepository;
     protected $routerRepository;
@@ -94,39 +94,39 @@ class LanguageService implements LanguageServiceInterface
         }
     }
 
-    public function updateStatus($post = []){
-        DB::beginTransaction();
-        try{
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
-            $language = $this->languageRepository->update($post['modelId'], $payload);
-            // $this->changeUserStatus($post, $payload[$post['field']]);
+    // public function updateStatus($post = []){
+    //     DB::beginTransaction();
+    //     try{
+    //         $payload[$post['field']] = (($post['value'] == 1)?2:1);
+    //         $language = $this->languageRepository->update($post['modelId'], $payload);
+    //         // $this->changeUserStatus($post, $payload[$post['field']]);
 
-            DB::commit();
-            return true;
-        }catch(\Exception $e ){
-            DB::rollBack();
-            // Log::error($e->getMessage());
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
+    //         DB::commit();
+    //         return true;
+    //     }catch(\Exception $e ){
+    //         DB::rollBack();
+    //         // Log::error($e->getMessage());
+    //         echo $e->getMessage();die();
+    //         return false;
+    //     }
+    // }
 
-    public function updateStatusAll($post){
-        DB::beginTransaction();
-        try{
-            $payload[$post['field']] = $post['value'];
-            $flag = $this->languageRepository->updateByWhereIn('id', $post['id'], $payload);
-            // $this->changeUserStatus($post, $post['value']);
+    // public function updateStatusAll($post){
+    //     DB::beginTransaction();
+    //     try{
+    //         $payload[$post['field']] = $post['value'];
+    //         $flag = $this->languageRepository->updateByWhereIn('id', $post['id'], $payload);
+    //         // $this->changeUserStatus($post, $post['value']);
 
-            DB::commit();
-            return true;
-        }catch(\Exception $e ){
-            DB::rollBack();
-            // Log::error($e->getMessage());
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
+    //         DB::commit();
+    //         return true;
+    //     }catch(\Exception $e ){
+    //         DB::rollBack();
+    //         // Log::error($e->getMessage());
+    //         echo $e->getMessage();die();
+    //         return false;
+    //     }
+    // }
 
     public function switch($id){
         DB::beginTransaction();

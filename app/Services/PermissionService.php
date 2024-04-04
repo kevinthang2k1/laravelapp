@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
  * Class PermissionService
  * @package App\Services
  */
-class PermissionService implements PermissionServiceInterface
+class PermissionService extends BaseService implements PermissionServiceInterface
 {
     protected $permissionRepository;
     
@@ -89,21 +89,6 @@ class PermissionService implements PermissionServiceInterface
         }
     }
 
-    public function updateStatus($post = []){
-        DB::beginTransaction();
-        try{
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
-            $permission = $this->permissionRepository->update($post['modelId'], $payload);
-
-            DB::commit();
-            return true;
-        }catch(\Exception $e ){
-            DB::rollBack();
-            // Log::error($e->getMessage());
-            echo $e->getMessage();die();
-            return false;
-        }
-    }
 
     private function paginateSelect(){
         return [
