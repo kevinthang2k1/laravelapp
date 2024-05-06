@@ -2,6 +2,7 @@
     "use strict";
     var HT = {};
     var counter = 1;
+    var _token = $('meta[name="csrf-token"]').attr('content');
 
     HT.addSlide = (type) => {
         $(document).on('click', '.addSlide', function(e){
@@ -125,8 +126,71 @@
         })
     }
 
+    HT.selectImage = (type) => {
+        $(document).on('click', '.select-image', function(e){
+            console.log(123);
+            e.preventDefault()
+            let _this = $(this);
+            if(typeof(type) == 'undefined'){
+                type = 'Images';
+            }
+            var finder = new CKFinder();
+            finder.resourceType = type;
+            finder.selectActionFunction = function(fileUrl, data){
+                let image =fileUrl
+                _this.siblings('img').attr('src', image)
+                _this.siblings('input').val(image)
+            }
+            finder.popup();
+        })
+    }
+
+    HT.changeImageOrder = () => {
+        $('.table-slide').sortable({
+            start: function(event, ui){
+                //Xu
+            },
+            stop: function(event, ui){
+
+            },
+            update: function(event, ui){
+                let data = []
+
+                ui.item.parent('.sortui').find('.ui-state-default').each(function(){
+                    let _this = $(this)
+                    let itemData = {
+                        id: _this.find('input[name="slide[id][]"]').val(),
+                        image: _this.find('input[name="slide[image][]"]').val(),
+                        name: _this.find('input[name="slide[name][]"]').val(),
+                        alt: _this.find('input[name="slide[alt][]"]').val(),
+                        description: _this.find('input[name="slide[description][]"]').val(),
+                        canonical: _this.find('input[name="slide[canonical][]"]').val(),
+                        window: _this.find('input[name="slide[window][]"]').val(),
+                    }
+
+                    data.push(itemData)
+                })
+
+                $.ajax({
+                    url: 'ajax/slide/order',
+                    type: 'POST',
+                    data: {
+                        payload: data,
+                        _token: _token
+                    },
+                    dataType: 'json',
+                    success: function(res){
+                        console.log(res);
+                    },
+                });
+            }
+        });
+    }
+
     $(document).ready(function(){
         HT.addSlide()
         HT.deleteSlide()
+        HT.selectImage()
+        HT.changeImageOrder()
     });
 })(jQuery)

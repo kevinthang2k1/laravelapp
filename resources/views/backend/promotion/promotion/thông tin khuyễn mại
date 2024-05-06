@@ -1,0 +1,24 @@
++ Thông tin khuyến mại 
+    - Tên khuyến mại : name
+    - Mã khuyến mại : code
+    - Mô tả 
+    - Album
++ Thông tin liên quan đến thời gian khuyến mại 
+    - Ngày bắt đầu
+    - Ngày kết thúc 
+    * Không giới hạn thời gian
++ Nguồn khách/ Nguồn đơn 
+    - Áp dụng cho toàn bộ
+    - Áp dụng cho 1 nguồn cụ thể 
++ Đối tượng áp dụng 
+    - Cho 1 nhóm khách cụ thể 
+    - Ngày sinh 
+    - Giới tính
++Thông tin của chương trình 
+    - Chọn hình thức
+        + Giảm giá theo tổng giá trị đơn hàng 
+        + Giảm giá theo từng sản phẩm 
+        + Giảm giá theo số lượng sản phẩm
+        + Giảm theo theo mua sản phẩm - giảm sản phẩm
+        + Giảm theo sản phẩm với điều kiện là tổng giá trị đơn hàng
+        

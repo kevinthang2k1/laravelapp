@@ -25,7 +25,7 @@ return new class extends Migration
             $table->tinyInteger('publish')->default(1);
             $table->integer('order')->default(0);
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade'); //khóa ngoại
             $table->foreign('menu_catalogue_id')->references('id')->on('menu_catalogues')->onDelete('cascade'); 
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();

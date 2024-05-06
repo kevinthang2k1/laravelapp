@@ -2,6 +2,8 @@
     "use strict";
     var HT = {};
     var _token = $('meta[name="csrf-token"]').attr('content');
+    var typingTimer;
+    var doneTyingInterval = 1000;//1s
 
     HT.createMenuCatalogue = () => {
         $(document).on('submit', '.create-menu-catalogue', function(e){
@@ -222,10 +224,6 @@
     }
 
     HT.searchMenu = () => {
-        let typingTimer;
-        let doneTyingInterval = 1000;//1s
-
-
         $(document).on('keyup', '.search-menu', function(e){
             let _this = $(this)
             let keyword = _this.val()

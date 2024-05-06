@@ -7,7 +7,7 @@
     </div>
     <div class="ibox-content">
         @php
-            $album = (!empty($model->album)) ? json_decode($model->album) : [];
+            $album = (isset($model->album) && is_array($model->album)) ? $model->album : ( (!empty($model->album)) ? json_decode($model->album) : []);
             $gallery = (isset($album) && count($album) ) ? $album : old('album');
         @endphp
         <div class="row">

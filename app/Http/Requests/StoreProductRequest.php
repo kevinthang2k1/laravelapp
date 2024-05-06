@@ -24,6 +24,7 @@ class StoreProductRequest extends FormRequest
         return [
             'name' => 'required',
             'canonical' => 'required|unique:routers',
+            'product_catalogue_id' => 'gt:0',
             'attribute' => 'required|array',
         ];
     }
@@ -33,6 +34,7 @@ class StoreProductRequest extends FormRequest
         return [
             'name.required' => 'Bạn chưa nhập vào ô tiêu đề.',
             'canonical.required' => 'Bạn chưa nhập vào ô đường dẫn',
+            'product_catalogue_id.gt' => 'Bạn chưa chọn danh mục cha',
             'canonical.unique' => 'Đường dẫn đã tồn tại, Hãy chọn đường dẫn khác',
         ];
     }

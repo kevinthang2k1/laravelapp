@@ -10,7 +10,7 @@ class Generate extends Model
 {
     use HasFactory,QueryScopes;
 
-    protected $tabel = 'generates';
+    protected $table = 'generates';
 
 
 }

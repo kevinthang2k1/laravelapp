@@ -26,6 +26,36 @@ return [
             ]
         ],
         [
+            'title' => 'QL Nhóm khách hàng',
+            'icon' => 'fa fa-user',
+            'name' => ['customer','permission'],
+            'subModule' => [
+                [
+                    'title' => 'QL Nhóm khách hàng',
+                    'route' => 'customer/catalogue/index'
+                ],
+                [
+                    'title' => 'QL khách hàng',
+                    'route' => 'customer/index'
+                ],
+            ]
+        ],
+        [
+            'title' => 'QL Marketing',
+            'icon' => 'fa fa-money',
+            'name' => ['promotion', 'source'],
+            'subModule' => [
+                [
+                    'title' => 'QL Khuyến mại',
+                    'route' => 'promotion/index'
+                ],
+                [
+                    'title' => 'QL nguồn khách',
+                    'route' => 'source/index'
+                ],
+            ]
+        ],
+        [
             'title' => 'QL Bài viết',
             'icon' => 'fa fa-file',
             'name' => ['post'],
@@ -84,7 +114,7 @@ return [
         [
             'title' => 'Cấu hình chung',
             'icon' => 'fa fa-file',
-            'name' => ['language','generate', 'system'],
+            'name' => ['language','generate', 'system', 'widget'],
             'subModule' => [
                 [
                     'title' => 'QL Ngôn ngữ',

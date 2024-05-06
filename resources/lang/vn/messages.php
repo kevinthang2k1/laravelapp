@@ -1,5 +1,33 @@
 <?php   
 return [
+    'widget' => [
+        'index' => [
+            'title' => 'Quản lý Widget',
+            'table' => 'Danh sách Widget',
+        ],
+        'create' => [
+            'title' => 'Thêm mới Widget',
+            'translate' => 'Tạo bản dịch {language} cho khuyến mại'
+        ],
+    ],
+    'source' => [
+        'index' => [
+            'title' => 'Quản lý nguồn khách',
+            'table' => 'Danh sách nguồn khách',
+        ],
+        'create' => [
+            'title' => 'Thêm mới nguồn khách',
+        ],
+    ],
+    'promotion' => [
+        'index' => [
+            'title' => 'Quản lý khuyến mại',
+            'table' => 'Danh sách khuyến mại',
+        ],
+        'create' => [
+            'title' => 'Thêm mới khuyến mại',
+        ],
+    ],
     'slide' => [
         'index' => [
             'title' => 'Quản lý Slide',
@@ -160,6 +188,38 @@ return [
         ],
         'permission' => [
             'title' => 'Cập nhật quyền'
+        ],
+        
+    ],
+    'customerCatalogue' => [
+        'index' => [
+            'title' => 'Quản lý nhóm khách hàng',
+            'table' => 'Danh sách nhóm khách hàng'
+        ],
+        'create' => [
+            'title' => 'Thêm mới nhóm khách hàng'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật nhóm khách hàng'
+        ],
+        'delete' => [
+            'title' => 'Xóa nhóm khách hàng'
+        ],
+        
+    ],
+    'customer' => [
+        'index' => [
+            'title' => 'Quản lý nhóm khách hàng',
+            'table' => 'Danh sách nhóm khách hàng'
+        ],
+        'create' => [
+            'title' => 'Thêm mới nhóm khách hàng'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật nhóm khách hàng'
+        ],
+        'delete' => [
+            'title' => 'Xóa nhóm khách hàng'
         ],
         
     ],

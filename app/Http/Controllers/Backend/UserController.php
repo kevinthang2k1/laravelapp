@@ -44,6 +44,8 @@ class UserController extends Controller
 
         $users = $this->userService->paginate($request);
 
+        $userCatalogues = $this->userCatalogueRepository->all();
+
         $config = [
             'js' => [
                 'backend/js/plugins/switchery/switchery.js',
@@ -62,7 +64,8 @@ class UserController extends Controller
         return view('backend.dashboard.layout', compact(
             'template',
             'config',
-            'users'
+            'users',
+            'userCatalogues'
         ));
     }
 

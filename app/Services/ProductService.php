@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Class ProductService
@@ -80,12 +81,15 @@ class ProductService extends BaseService implements ProductServiceInterface
         DB::beginTransaction();
         try{
             $product = $this->createProduct($request);
+            // dd($product);
             if($product->id > 0){
                 $this->updateLanguageForProduct($product, $request, $languageId);
                 $this->updateCatalogueForProduct($product, $request);
                 $this->createRouter($product, $request, $this->controllerName, $languageId);
 
-                $this->createVariant($product, $request, $languageId);
+                if($request->input('attribute')){
+                    $this->createVariant($product, $request, $languageId);
+                }            
             }
             DB::commit();
             return true;
@@ -112,7 +116,9 @@ class ProductService extends BaseService implements ProductServiceInterface
                     $variant->attributes()->detach();
                     $variant->delete();
                 });
-                $this->createVariant($product, $request, $languageId);
+                if($request->input('attribute')){
+                    $this->createVariant($product, $request, $languageId);
+                }
             }
             DB::commit();
             return true;
@@ -141,7 +147,7 @@ class ProductService extends BaseService implements ProductServiceInterface
 
     private function createVariant($product, $request, $languageId){
         $payload = $request->only(['variant', 'productVariant','attribute']); 
-        $variant = $this->createVariantArray($payload);
+        $variant = $this->createVariantArray($payload, $product);
         // $product->product_variants()->delete();
         $variants = $product->product_variants()->createMany($variant);
         $variantsId = $variants->pluck('id');
@@ -191,11 +197,15 @@ class ProductService extends BaseService implements ProductServiceInterface
         return $combines;
     }
 
-    private function createVariantArray(array $payload = []): array{
+    private function createVariantArray(array $payload = [], $product): array{
         $variant = [];
         if(isset($payload['variant']['sku']) && count($payload['variant']['sku'])){
             foreach($payload['variant']['sku'] as $key => $val){
+
+                $uuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $product->id.', '.$payload['productVariant']['id'][$key]);
+
                 $variant[] = [
+                    'uuid' => $uuid,
                     'code' => ($payload['productVariant']['id'][$key]) ?? '',
                     'quantity' => ($payload['variant']['quantity'][$key]) ?? 0,
                     'sku' => $val,
@@ -207,6 +217,7 @@ class ProductService extends BaseService implements ProductServiceInterface
                     'user_id' => Auth::id(),
                 ];
             }
+            // dd($variant);
         }
         return $variant;
     }
@@ -215,11 +226,12 @@ class ProductService extends BaseService implements ProductServiceInterface
         $payload = $request->only($this->payload());
         $payload['user_id'] = Auth::id();
         $payload['album'] = $this->formatAlbum($request);
-        $payload['price'] = convert_price($payload['price']);
+        $payload['price'] = convert_price(($payload['price']) ?? 0);
         $payload['attributeCatalogue'] = $this->formatJson($request,'attributeCatalogue');
         $payload['attribute'] = $this->formatJson($request,'attribute');
         $payload['variant'] = $this->formatJson($request,'variant');
         $product = $this->productRepository->create($payload);
+        // dd($product);
         return $product;
     }
 

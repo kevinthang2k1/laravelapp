@@ -79,6 +79,7 @@ class ProductController extends Controller
         //$this->authorize('modules', 'product.create');
 
         $attributeCatalogue = $this->attributeCatalogue->getAll($this->language);
+        // dd($attributeCatalogue);
         $config = $this->configData();
         $config['seo'] = __('messages.product');
         $config['method'] = 'create';

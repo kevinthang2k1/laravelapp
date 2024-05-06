@@ -184,19 +184,41 @@
         return str;
     }
 
+    HT.setupDatepicker = () => {
+        $('.datepicher').datetimepicker({
+            TimeRanges:true,
+            format:'d/m/Y H:i',
+            minDate:new Date(),
+        });
+    }
+
+
     
 
 	$(document).ready(function(){
-        HT.switchery();
-        HT.select2();
-        HT.changeStatus();
-        HT.checkAll();
-        HT.checkBoxItem();
-        HT.allChecked();
-        HT.changeStatusAll();
-        HT.sortui();
-        HT.int();
-        
+        HT.switchery()
+        HT.select2()
+        HT.changeStatus()
+        HT.checkAll()
+        HT.checkBoxItem()
+        HT.allChecked()
+        HT.changeStatusAll()
+        HT.sortui()
+        HT.int()
+        HT.setupDatepicker()
 	});
 
 })(jQuery);
+
+
+addCommas = (nStr) => { 
+    nStr = String(nStr);
+    nStr = nStr.replace(/\./gi, "");
+    let str ='';
+    for (let i = nStr.length; i > 0; i -= 3){
+        let a = ( (i-3) < 0 ) ? 0 : (i-3);
+        str= nStr.slice(a,i) + '.' + str;
+    }
+    str= str.slice(0,str.length-1);
+    return str;
+}

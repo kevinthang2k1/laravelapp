@@ -1,3 +1,4 @@
+@if(!isset($offTitle))
 <div class="row mb15">
     <div class="col-lg-12">
         <div class="form-row">
@@ -14,6 +15,7 @@
         </div>
     </div>
 </div>
+@endif
 <div class="row mb30">
     <div class="col-lg-12">
         <div class="form-row">
@@ -23,13 +25,15 @@
                 class="ck-editor" 
                 id="ckDescription"
                 {{ (isset($disabled)) ? 'disabled' : '' }} 
-                data-height="100">{{ old('description', ($model->description) ?? '') }}</textarea>
+                data-height="100">{{ old('description', ($model->description) ?? '') }}
+            </textarea>
                 {{-- 
                     các cacsi model này nó đại diện cho cái biến mà truyền từ mọi chỗ mà gọi cái file này    
                 --}}
         </div>
     </div>
 </div>
+@if(!isset($offContent))
 <div class="row">
     <div class="col-lg-12">
         <div class="form-row">
@@ -49,3 +53,4 @@
         </div>
     </div>
 </div>
+@endif

@@ -106,6 +106,7 @@ class SlideService extends BaseService implements SlideServiceInterface
     public function converSlideArray(array $slide = []): array{
         $temp = [];
         $fields = ['image', 'description', 'window', 'canonical', 'name', 'alt'];
+        //dd($fields);
         foreach($slide as $key => $val){
             foreach($fields as $field){
                 $temp[$field][] = $val[$field];

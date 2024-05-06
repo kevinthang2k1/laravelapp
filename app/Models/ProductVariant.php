@@ -21,8 +21,15 @@ class ProductVariant extends Model
         'album',
         'publish',
         'user_id',
+        'uuid',
     ];
+//khai báo khóa chính
+    // protected $primraryKey = 'uuid';
 
+    // public $incrementing = false;
+
+    protected $table = 'product_variants';
+//end
     public function products(){
         return $this->belongTo(Product::class, 'product_id', 'id');
     }
