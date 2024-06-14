@@ -8,6 +8,9 @@ use App\Repositories\Interfaces\ProductRepositoryInterface as ProductRepository;
 use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
 use App\Repositories\Interfaces\ProductVariantLanguageRepositoryInterface as ProductVariantLanguageRepository;
 use App\Repositories\Interfaces\ProductVariantAttributeRepositoryInterface as ProductVariantAttributeRepository;
+use App\Repositories\Interfaces\PromotionRepositoryInterface as PromotionRepository;
+use App\Repositories\Interfaces\AttributeCatalogueRepositoryInterface as AttributeCatalogueRepository;
+use App\Repositories\Interfaces\AttributeRepositoryInterface as AttributeRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Carbon;
@@ -15,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Pagination\Paginator;
 
 /**
  * Class ProductService
@@ -26,6 +30,9 @@ class ProductService extends BaseService implements ProductServiceInterface
     protected $routerRepository;
     protected $productVariantLanguageRepository;
     protected $productVariantAttributeRepository;
+    protected $promotionRepository;
+    protected $attributeCatalogueRepository;
+    protected $attributeRepository;
 
     
     public function __construct(
@@ -33,6 +40,10 @@ class ProductService extends BaseService implements ProductServiceInterface
         RouterRepository $routerRepository,
         ProductVariantLanguageRepository $productVariantLanguageRepository,
         ProductVariantAttributeRepository $productVariantAttributeRepository,
+        PromotionRepository $promotionRepository,
+        AttributeCatalogueRepository $attributeCatalogueRepository,
+        AttributeRepository $attributeRepository,
+
 
     ){
         $this->productRepository = $productRepository;
@@ -40,10 +51,23 @@ class ProductService extends BaseService implements ProductServiceInterface
         $this->productVariantLanguageRepository = $productVariantLanguageRepository;
         $this->productVariantAttributeRepository = $productVariantAttributeRepository;
         $this->controllerName = 'ProductController';
+        $this->promotionRepository = $promotionRepository;
+        $this->attributeCatalogueRepository = $attributeCatalogueRepository;
+        $this->attributeRepository = $attributeRepository;
+
     }
 
-    public function paginate($request, $languageId){
-        $perPage = $request->integer('perpage');
+    public function paginate($request, $languageId, $productCatalogue = null, $page = 1,$extend = []){
+        
+        if(!is_null($productCatalogue)){
+            Paginator::currentPageResolver(function () use ($page){
+                return $page;
+            });
+        }
+
+        // $perPage = $request->integer('perpage');
+        $perPage = (!is_null($productCatalogue)) ? 15 : 20;
+
         $condition = [
             'keyword' => addslashes($request->input('keyword')),
             'publish' => $request->integer('publish'),
@@ -52,12 +76,12 @@ class ProductService extends BaseService implements ProductServiceInterface
             ],
         ];
         $paginationConfig = [
-            'path' => 'product.index', 
+            'path' => ($extend['path']) ?? 'product/index', 
             'groupBy' => $this->paginateSelect()
         ];
         $orderBy = ['products.id', 'DESC'];
         $relations = ['product_catalogues'];
-        $rawQuery = $this->whereRaw($request, $languageId);
+        $rawQuery = $this->whereRaw($request, $languageId, $productCatalogue);
         // dd($rawQuery);
         $joins = [
             ['product_language as tb2', 'tb2.product_id', '=', 'products.id'],
@@ -74,6 +98,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             $relations,
             $rawQuery
         ); 
+
         return $products;
     }
 
@@ -201,12 +226,14 @@ class ProductService extends BaseService implements ProductServiceInterface
         $variant = [];
         if(isset($payload['variant']['sku']) && count($payload['variant']['sku'])){
             foreach($payload['variant']['sku'] as $key => $val){
+                $vId = ($payload['productVariant']['id'][$key]) ?? '';
+                $productVariantId = sortString($vId);
 
                 $uuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $product->id.', '.$payload['productVariant']['id'][$key]);
 
                 $variant[] = [
                     'uuid' => $uuid,
-                    'code' => ($payload['productVariant']['id'][$key]) ?? '',
+                    'code' => $productVariantId,
                     'quantity' => ($payload['variant']['quantity'][$key]) ?? 0,
                     'sku' => $val,
                     'price' => ($payload['variant']['price'][$key]) ? convert_price($payload['variant']['price'][$key]) : '',
@@ -228,7 +255,7 @@ class ProductService extends BaseService implements ProductServiceInterface
         $payload['album'] = $this->formatAlbum($request);
         $payload['price'] = convert_price(($payload['price']) ?? 0);
         $payload['attributeCatalogue'] = $this->formatJson($request,'attributeCatalogue');
-        $payload['attribute'] = $this->formatJson($request,'attribute');
+        $payload['attribute'] = $request->input('atribute');//đã cats trong model product thành dạng mảng
         $payload['variant'] = $this->formatJson($request,'variant');
         $product = $this->productRepository->create($payload);
         // dd($product);
@@ -269,9 +296,10 @@ class ProductService extends BaseService implements ProductServiceInterface
         return [$request->product_catalogue_id];
     }
 
-    private function whereRaw($request, $languageId){
+    private function whereRaw($request, $languageId, $productCatalogue = null){
         $rawCondition = [];
-        if($request->integer('product_catalogue_id') > 0){
+        if($request->integer('product_catalogue_id') > 0 || !is_null($productCatalogue)){
+            $catId = ($request->integer('product_catalogue_id') > 0) ? $request->integer('product_catalogue_id') : $productCatalogue->id;
             $rawCondition['whereRaw'] =  [
                 [
                     'tb3.product_catalogue_id IN (
@@ -282,7 +310,7 @@ class ProductService extends BaseService implements ProductServiceInterface
                         AND rgt <= (SELECT rgt FROM product_catalogues as pc WHERE pc.id = ?)
                         AND product_catalogue_language.language_id = '.$languageId.'
                     )',
-                    [$request->integer('product_catalogue_id'), $request->integer('product_catalogue_id')]
+                    [$catId, $catId]
                 ]
             ];
             
@@ -296,6 +324,7 @@ class ProductService extends BaseService implements ProductServiceInterface
             'products.publish',
             'products.image',
             'products.order',
+            'products.price',
             'tb2.name', 
             'tb2.canonical',
         ];
@@ -329,5 +358,45 @@ class ProductService extends BaseService implements ProductServiceInterface
         ];
     }
 
+    public function combineProductAndPromotion($productId = [], $products, $flag = false){
+        $promotions = $this->promotionRepository->findByProduct($productId);
+        if($promotions){
+            if($flag == true){
+                $products->promotions = ($promotions[0] ?? []);
+                return $products;
+            }
 
+
+            foreach($products as $index =>$product){
+                foreach($promotions as $key => $promotion){
+                    if($promotion->product_id == $product->id){
+                        $products[$index]->promotions = $promotion;
+                    }
+                }
+            }
+        }
+        return $products;
+    }
+// ????? xem lại 
+    public function getAttribute($product, $language){
+        // dd($product->attribute);
+        $attributeCatalogueId = array_keys($product->attribute);
+        $attrCatalogues = $this->attributeCatalogueRepository->getAttributeCatalogueWhereIn($attributeCatalogueId, 'attribute_catalogues.id', $language);
+        /*-------------*/
+        $attributeId = array_merge(...$product->attribute);
+        $attrs = $this->attributeRepository->findAttributeByIdArray($attributeId, $language);
+        if(!is_null($attrCatalogues)){
+            foreach($attrCatalogues as $key => $val){
+                $tempAttributes = [];
+                foreach($attrs as $attr){
+                    if($val->id == $attr->attribute_catalogue_id){
+                        $tempAttributes[] = $attr;
+                    }
+                }
+                $val->attributes = $tempAttributes;
+            }
+        }
+        $product->attributeCatalogue = $attrCatalogues;
+        return $product;
+    }
 }

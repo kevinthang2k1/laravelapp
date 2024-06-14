@@ -8,6 +8,12 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
 use DateTime;
 use Carbon\Carbon;
+use App\Http\ViewComposers\SystemComposer;
+use App\Http\ViewComposers\MenuComposer;
+use App\Http\ViewComposers\LanguageComposer;
+use App\Http\ViewComposers\CategoryComposer;
+use App\Models\Language;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\WidgetServiceInterface' => 'App\Services\WidgetService',
         'App\Services\Interfaces\PromotionServiceInterface' => 'App\Services\PromotionService',
         'App\Services\Interfaces\SourceServiceInterface' => 'App\Services\SourceService',
+        'App\Services\Interfaces\CartServiceInterface' => 'App\Services\CartService',
 
     ];
 
@@ -56,6 +63,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $locale = app()->getLocale();
+        $language = Language::where('canonical', $locale)->first();
+
         Validator::extend('custom_date_format',function($attribute, $value, $parameters, $validator){
             return Datetime::createFromFormat('d/m/Y H:i', $value) !== false;
         });
@@ -64,6 +74,19 @@ class AppServiceProvider extends ServiceProvider
             $startDate = Carbon::createFromFormat('d/m/Y H:i', $validator->getData()[$parameters[0]]);
             $endDate = Carbon::createFromFormat('d/m/Y H:i', $value);
             return $endDate->greaterThan($startDate) !== false;//so sánh ngày kết thúc với ngày bắt đầu
+        });
+
+        view()->composer('frontend.homepage.layout', function($view) use ($language){
+            $composerClasses = [
+                SystemComposer::class,
+                MenuComposer::class,
+                LanguageComposer::class,
+            ];
+
+            foreach($composerClasses as $key => $val){
+                $composer = app()->make($val, ['language' => $language->id]);
+                $composer->compose($view);
+            }
         });
 
         Schema::defaultStringLength(191);

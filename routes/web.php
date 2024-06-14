@@ -1,45 +1,72 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Backend\AuthController;
-use App\Http\Controllers\Backend\DashboardController;
-use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Middleware\AuthenticateMiddleware;
-use App\Http\Controllers\Backend\UserController;
-use App\Http\Controllers\Backend\CustomerController;
+
+use App\Http\Controllers\Backend\User\AuthController;
+use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\User\UserController;
+use App\Http\Controllers\Backend\Customer\CustomerController;
 use App\Http\Controllers\Backend\LanguageController;
-use App\Http\Controllers\Backend\UserCatalogueController;
-use App\Http\Controllers\Backend\CustomerCatalogueController;
-use App\Http\Controllers\Backend\PostCatalogueController;
-use App\Http\Controllers\Backend\PostController;
-use App\Http\Controllers\Backend\PermissionController;
+use App\Http\Controllers\Backend\User\UserCatalogueController;
+use App\Http\Controllers\Backend\Customer\CustomerCatalogueController;
+use App\Http\Controllers\Backend\Post\PostCatalogueController;
+use App\Http\Controllers\Backend\Post\PostController;
+use App\Http\Controllers\Backend\Promotion\PermissionController;
 use App\Http\Controllers\Backend\GenerateController;
 use App\Http\Controllers\Backend\MenuController;
 use App\Http\Controllers\Backend\SlideController;
 use App\Http\Controllers\Backend\WidgetController;
-use App\Http\Controllers\Backend\SourceController;
-use App\Http\Controllers\Backend\PromotionController;
-use App\Http\Controllers\Ajax\LocationController;
-use App\Http\Controllers\Backend\ProductCatalogueController;
-use App\Http\Controllers\Backend\ProductController;
-use App\Http\Controllers\Backend\AttributeCatalogueController;
-use App\Http\Controllers\Backend\AttributeController;
-use App\Http\Controllers\Ajax\AttributeController as AjaxAttributeController;
-use App\Http\Controllers\Ajax\MenuController as AjaxMenuController;
-use App\Http\Controllers\Ajax\ProductController as AjaxProductController;
-use App\Http\Controllers\Ajax\SlideController as AjaxSlideController;
-use App\Http\Controllers\Ajax\SourceController as AjaxSourceController;
+use App\Http\Controllers\Backend\Customer\SourceController;
+use App\Http\Controllers\Backend\Promotion\PromotionController;
+use App\Http\Controllers\Backend\Product\ProductCatalogueController;
+use App\Http\Controllers\Backend\Product\ProductController;
+use App\Http\Controllers\Backend\Attribute\AttributeCatalogueController;
+use App\Http\Controllers\Backend\Attribute\AttributeController;
 use App\Http\Controllers\Backend\SystemController;
 
-//@@useController@@
+use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
+use App\Http\Controllers\Ajax\LocationController;
+use App\Http\Controllers\Ajax\AttributeController as AjaxAttributeController;
+use App\Http\Controllers\Ajax\MenuController as AjaxMenuController;
+use App\Http\Controllers\Ajax\SlideController as AjaxSlideController;
+use App\Http\Controllers\Ajax\SourceController as AjaxSourceController;
+use App\Http\Controllers\Ajax\ProductController as AjaxProductController;
+use App\Http\Controllers\Ajax\CartController as AjaxCartController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\RouterController;
+use App\Http\Controllers\Frontend\CartController;
 
+
+
+
+
+// FRONTEND ROUTES
+Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('thanh-toan'.config('apps.general.suffix'), [CartController::class, 'checkout'])->name('cart.checkout');
+
+Route::get('{canonical}'.config('apps.general.suffix'), [RouterController::class, 'index'])->name('router.index')->where('canonical', '[a-zA-Z0-9-]+');
+Route::get('{canonical}/trang-{page}'.config('apps.general.suffix'), [RouterController::class, 'page'])->name('router.page')->where('canonical', '[a-zA-Z0-9-]+')->where('page', '[0-9]+');
+Route::post('cart/create', [CartController::class, 'store'])->name('cart.store');
+Route::get('cart/{code}/success'.config('apps.general.suffix'), [CartController::class, 'success'])->name('cart.success');
+
+
+//FRONTEND AJAX ROUTES
+Route::get('ajax/product/loadVariant', [AjaxProductController::class, 'loadVariant'])->name('ajax.loadVariant');
+Route::post('ajax/cart/create', [AjaxCartController::class, 'create'])->name('ajax.cart.create');
+Route::post('ajax/cart/update', [AjaxCartController::class, 'update'])->name('ajax.cart.update');
+Route::post('ajax/cart/delete', [AjaxCartController::class, 'delete'])->name('ajax.cart.delete');
+Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.index');
+
+
+
+
+
+
+/*BECKEND ROUTES*/
 Route::group(['middleware' => ['admin','locale', 'backend_default_locale']], function () {
-    /*BECKEND ROUTES*/
-Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index');
 
 /*USER*/
     Route::group(['prefix' => 'user'], function(){
@@ -238,7 +265,6 @@ Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dash
 //@@new-module@@
 
     /* AJAX */ 
-    Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.index');
     Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->name('ajax.dashboard.changeStatus');
     Route::post('ajax/dashboard/changeStatusAll', [AjaxDashboardController::class, 'changeStatusAll'])->name('ajax.dashboard.changeStatusAll');
     Route::get('ajax/dashboard/getMenu', [AjaxDashboardController::class, 'getMenu'])->name('ajax.dashboard.getMenu');
@@ -253,6 +279,7 @@ Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dash
     Route::post('ajax/slide/order', [AjaxSlideController::class, 'order'])->name('ajax.slide.order');
     Route::get('ajax/product/loadProducPromotion', [AjaxProductController::class, 'loadProducPromotion'])->name('ajax.loadProducPromotion');
     Route::get('ajax/source/getAllSource', [AjaxSourceController::class, 'getAllSource'])->name('ajax.getAllSource');
+
 });
 
 Route::get('admin', [AuthController::class, 'index'])->name('auth.admin')->middleware('login');

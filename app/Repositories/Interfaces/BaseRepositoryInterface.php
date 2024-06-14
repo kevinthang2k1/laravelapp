@@ -8,7 +8,7 @@ namespace App\Repositories\Interfaces;
  */
 interface BaseRepositoryInterface
 {
-    public function all(array $relation);
+    public function all(array $relation, string $selectRaw = '');
     public function findById(int $id);
     public function create(array $payload);
     public function update(int $id = 0, array $payload = []);
@@ -28,5 +28,5 @@ interface BaseRepositoryInterface
     public function forceDeleteByCondition(array $condition = []);
     public function createBatch(array $payload = []);
     public function updateOrInsert(array $payload = [], array $condition = []);
-    public function findByCondition($condition = [],$flag = false, $relation = [],array $orderBy = ['id', 'desc']);
+    public function findByCondition($condition = [],$flag = false, $relation = [],array $orderBy = ['id', 'desc'], array $withCount = []);
 }

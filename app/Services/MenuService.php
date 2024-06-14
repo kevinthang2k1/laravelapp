@@ -74,7 +74,7 @@ class MenuService extends BaseService implements MenuServiceInterface
                             );
                         }
                     }
-                    // dd($menuSave);
+                    // dd($menuSave->toArray());
                     // $menu = $this->menuRepository->create($menuArray);
                     if($menuSave->id > 0){
                         $menuSave->languages()->detach([$this->language, $menuSave->id]);

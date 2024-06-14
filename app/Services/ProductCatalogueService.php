@@ -38,6 +38,7 @@ class ProductCatalogueService extends BaseService implements ProductCatalogueSer
     }
 
     public function paginate($request, $languageId){
+        // $perPage = 5;
         $perPage = $request->integer('perpage');
         $condition = [
             'keyword' => addslashes($request->input('keyword')),

@@ -45,8 +45,9 @@ class SlideService extends BaseService implements SlideServiceInterface
         try{
             $payload =$request->only('_token','name', 'keyword', 'setting', 'short_code'); 
             $payload['item'] = $this->handleSlideItem($request, $languageId);
+            // dd($payload);
             $slide = $this->slideRepository->create($payload);
-            
+            // dd($slide);
             DB::commit();
             return true;
         }catch(\Exception $e ){
@@ -100,6 +101,7 @@ class SlideService extends BaseService implements SlideServiceInterface
                 'window' => (isset($slide['window'][$key])) ? $slide['window'][$key] : '',
             ];
         }
+        // dd($temp);
         return $temp;
     }
 
@@ -122,6 +124,31 @@ class SlideService extends BaseService implements SlideServiceInterface
             'keyword',
             'item',
             'publish',
+        ];
+    }
+
+    public function getSlide($array = [], $language = 1){
+        $slides = $this->slideRepository->findByCondition(...$this->getSlideAgrument($array));
+        $temp = [];
+        foreach($slides as $key => $val){
+            $temp[$val->keyword]['item'] = $val->item[$language];
+            $temp[$val->keyword]['setting'] = $val->setting;
+        }
+        return $temp;
+    }
+
+    private function getSlideAgrument($array){
+        return [
+            'condition' => [
+                config('apps.general.defaultPublish'),
+            ],
+            'flag' => TRUE,
+            'relation' => [],
+            'orderBy' => ['id', 'desc'],
+            'param' => [
+                'whereIn' => $array,
+                'whereInField' => 'keyword'
+            ],
         ];
     }
 

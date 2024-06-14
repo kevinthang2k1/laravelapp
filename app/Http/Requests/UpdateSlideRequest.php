@@ -33,7 +33,8 @@ class UpdateSlideRequest extends FormRequest
         return [
             'name.required' => 'Bạn chưa nhập tên của Slide',
             'keyword.required' => 'Bạn chưa nhập từ khóa của Slide',
-            'slide.image.required' => 'Bạn chưa chọn hình ảnh nào cho Slide'
+            'slide.image.required' => 'Bạn chưa chọn hình ảnh nào cho Slide',
+            'keyword.uique' => 'Từ khóa đã tồn tại . Chọn từ khóa khác đi bạn ơi.',
         ];
     }
 }

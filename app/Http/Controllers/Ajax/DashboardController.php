@@ -84,7 +84,7 @@ class DashboardController extends Controller
         return [
             'select' => [$model.'s.id', 'name', 'canonical'],
             'condition' => $condition,
-            'perpage' => 1,
+            'perpage' => 10,
             'paginationConfig' => [
                 'path' => $model.'.index',
                 'groubBy' =>['id','name'],

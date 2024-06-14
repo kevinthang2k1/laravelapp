@@ -46,11 +46,22 @@ class PromotionService extends BaseService implements PromotionServiceInterface
             'code',
             'description',
             'method',
-            'PromotionEnum::module_type',
             'startDate',
             'endDate',
             'neverEndDate',
+            'discountValue',
+            'neverEndDate',
+            'neverEndDate',
+
         );
+        $payload['maxDiscountValue'] = $request->input(PromotionEnum::PRODUCT_AND_QUANTITY.'.maxDiscountValue');
+        $payload['discountValue'] = convert_price($request->input(PromotionEnum::PRODUCT_AND_QUANTITY.'.discountValue'));
+        $payload['discountType'] = $request->input(PromotionEnum::PRODUCT_AND_QUANTITY.'.discountType');
+
+        if(is_null($payload['discountType'])){
+            $payload['discountType'] = '';
+        }
+
         $payload['startDate'] = Carbon::createFromFormat('d/m/Y H:i', $payload['startDate']);
         if(isset($payload['endDate'])){
             $payload['endDate'] = Carbon::createFromFormat('d/m/Y H:i', $payload['endDate']);

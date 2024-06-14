@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Repositories\Interfaces\BaseRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Base;
+use Illuminate\Support\Facades\DB;
+
 /**
  * Class BaseService
  * @package App\Services
@@ -44,7 +46,7 @@ class BaseRepository implements BaseRepositoryInterface
                 ->withQueryString()->withPath(env('APP_URL').$extend['path']);
     }
 
-    public function create(array $payload = []){
+    public function create(array $payload = [], array $relation = []){
         $model = $this->model->create($payload);
         return $model->fresh();
     }
@@ -93,8 +95,14 @@ class BaseRepository implements BaseRepositoryInterface
         return $query->forceDelete();
     }
 
-    public function all(array $relation = []){
-        return $this->model->with($relation)->get();
+    public function all(array $relation = [],string $selecyRaw = ''){
+        $query = $this->model->newQuery();
+        $query->select('*');
+        if(!empty($selecyRaw)){
+            $query->selectRaw($selecyRaw);
+        }
+        $query->with($relation);
+        return $query->get();
     }
 
     public function findById(
@@ -111,6 +119,8 @@ class BaseRepository implements BaseRepositoryInterface
             $relation = [],
             array $orderBy = ['id', 'desc'],
             array $param = [],
+            array $withCount = [],
+
         ){
         $query = $this->model->newQuery();
         foreach($condition as $key => $val){
@@ -122,6 +132,7 @@ class BaseRepository implements BaseRepositoryInterface
         }
 
         $query->with($relation);
+        $query->withCount($withCount);
         $query->orderBy($orderBy[0], $orderBy[1]);
         return ($flag == false) ? $query->first() : $query->get();
     }
@@ -149,6 +160,67 @@ class BaseRepository implements BaseRepositoryInterface
                 $query->where($alias . '.' . $val[0], $val[1], $val[2]);
             }
         })->get();
-    }    
+    }  
 
+    public function recursiveCategory(string $parameter = '', $table = ''){
+        // dd($parameter);
+        $table = $table.'_catalogues';
+        $query = "
+            WITH RECURSIVE category_tree AS (
+                SELECT id, parent_id, deleted_at
+                FROM $table
+                WHERE id IN (?)
+                UNION ALL
+                SELECT c.id, c.parent_id, c.deleted_at
+                FROM $table as c
+                JOIN category_tree as ct ON ct.id = c.parent_id
+            )
+            SELECT id FROM category_tree WHERE deleted_at IS NULL
+        ";
+        $results = DB::select($query, [$parameter]);
+        return $results;
+    }
+
+    public function findObjectByCategoryIds($catIds = [], $model, $language){
+        // dd($model);
+        $query = $this->model->newQuery();
+        $this->model->select(
+            $model.'s.*',
+        )
+        ->where(
+            [config('apps.general.defaultPublish')]
+        )
+        ->with('languages', function($query) use ($language){
+            $query->where('language_id', $language);
+        })
+        ->with($model.'_catalogues', function($query)  use ($language){
+            $query->with('languages', function($query) use ($language){
+                $query->where('language_id', $language);
+            });
+        });
+        
+        if($model === 'product'){
+            $query->with('product_variants');
+        }
+
+        $query->join($model.'_catalogue_'.$model.' as tb2', 'tb2.'.$model.'_id', '=', $model.'s.id')
+        ->whereIn('tb2.'.$model.'_catalogue_id', $catIds)
+        ->orderBy('order', 'desc')
+        ->limit(8)
+        ->get();
+
+        return $query->get();
+    }
+
+    public function breadcrumb($model, $language){
+        return $this->findByCondition([
+            ['lft', '<=', $model->lft],     
+            ['rgt', '>=', $model->rgt],  
+            config('apps.general.defaultPublish')     
+        ], true, [
+            'languages' => function($query) use ($language){
+                $query->where('language_id', $language);
+            }
+        ], ['lft', 'asc']);
+    }
 }

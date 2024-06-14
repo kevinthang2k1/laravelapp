@@ -28,6 +28,10 @@ class Product extends Model
         'variant',
     ];
 
+    protected $casts = [
+        'attribute' => 'json'
+    ];
+
     protected $table = 'products';
 
     public function languages(){
@@ -55,6 +59,18 @@ class Product extends Model
         ->withPivot(
             'product_variant_id',
             'model',
+        )->withTimestamps();
+    }
+
+    public function orders(){
+        return $this->belongsToMany(Order::class, 'order_product' , 'product_id', 'order_id')
+        ->withPivot(
+            'uuid',
+            'name',
+            'qty',
+            'price',
+            'priceOriginal',
+            'option',
         )->withTimestamps();
     }
 }

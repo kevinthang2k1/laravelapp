@@ -34,4 +34,8 @@ class Menu extends Model
             'canonical',
         )->withTimestamps();
     }
+
+    public function menu_catalogues(){
+        return $this->belongTo(MenuCatalogue::class, 'menu_catalogue_id', 'id');
+    }
 }

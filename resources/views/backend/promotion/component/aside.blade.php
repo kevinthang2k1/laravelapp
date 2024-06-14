@@ -10,8 +10,7 @@
                     <input 
                         type="text"
                         name="startDate"
-                        {{-- value="{{ old('startDate', convertDateTime($model->startDate) ?? '' ) }}" --}}
-                        value="{{ old('startDate', ($model->startDate) ?? '' ) }}"
+                        value="{{ old('startDate', (isset($model->startDate)) ? convertDateTime($model->startDate) : null) }}"
                         class="form-control datepicher"
                         placeholder=""
                         autocomplete="off"
@@ -25,8 +24,7 @@
                     <input 
                         type="text"
                         name="endDate"
-                        value="{{ old('endDate', ($model->endDate) ?? '' ) }}"
-                        {{-- value="{{ old('endDate', convertDateTime($model->endDate) ?? '' ) }}" --}}
+                        value="{{ old('endDate', (isset($model->endDate)) ? convertDateTime($model->endDate) : null) }}"
                         class="form-control datepicher"
                         placeholder=""
                         autocomplete="off"

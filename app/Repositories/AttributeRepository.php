@@ -57,10 +57,12 @@ class AttributeRepository extends BaseRepository implements AttributeRepositoryI
     public function findAttributeByIdArray(array $attributeArray = [], int $languageId = 0){
         return $this->model->select([
             'attributes.id',
+            'attributes.attribute_catalogue_id',
             'tb2.name'
         ])
         ->join('attribute_language as tb2','tb2.attribute_id','=','attributes.id')
         ->where('tb2.language_id','=',$languageId)
+        ->where([config('apps.general.defaultPublish')])
         ->whereIn('attributes.id', $attributeArray)
         ->get();
     }

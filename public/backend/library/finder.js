@@ -164,6 +164,6 @@
         HT.uploadImageAvatar();
         HT.multipleUploadImageCkeditor();
         HT.uploadAlbum();
-        // HT.deletePicture();
+        HT.deletePicture();
     });
 })(jQuery);

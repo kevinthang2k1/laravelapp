@@ -696,7 +696,7 @@
             id: [],
             product_variant_id: [],
             name: [],
-            uuid: [],
+            variant_uuid: [],
         }   
 
         // console.log(preloadObject);
@@ -705,7 +705,7 @@
             product_id: id,
             product_variant_id: preloadObject.product_variant_id[index] || 'null',
             name: preloadObject.name[index],
-            uuid: preloadObject.uuid[index] || 'null',
+            uuid: preloadObject.variant_uuid[index] || 'null',
         }))
         // console.log(objectArray);
 

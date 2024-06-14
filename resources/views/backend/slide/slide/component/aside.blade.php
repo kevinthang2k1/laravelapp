@@ -139,7 +139,7 @@
                         type="checkbox"
                         name="setting[autoplay]"
                         value="accept"
-                        @if(!old() || old('setting.autoplay', old($slide->setting['autoplay']) ?? null ) == 'accept')
+                        @if(!old() || old('setting.autoplay', ($slide->setting['autoplay']) ?? null ) == 'accept')
                         checked="checked" @endif
                     >
                 </div>

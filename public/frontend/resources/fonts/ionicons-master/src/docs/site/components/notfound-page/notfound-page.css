@@ -1,0 +1,10 @@
+notfound-page {
+  text-align: center;
+  height: 100%;
+}
+notfound-page h1 {
+  max-width: 500px;
+}
+notfound-page a {
+  font-weight: 600;
+}/*# sourceMappingURL=notfound-page.css.map */
